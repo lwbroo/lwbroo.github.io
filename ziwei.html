@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ziwei Bazi Trend | lwbro studio</title>
-<meta name="description" content="Ziwei Bazi Trend is a personal Ziwei and Bazi record and analysis app for iPhone and iPad.">
+<title data-en="Ziwei Bazi Trend — lwbro studio" data-zh-hant="Ziwei Bazi Trend 紫微八字趨勢 — lwbro studio">Ziwei Bazi Trend 紫微八字趨勢 — lwbro studio</title>
+<meta name="description" data-en="Ziwei Bazi Trend is a personal Ziwei and Bazi journal for charts, daily flow, mood, and energy trends." data-zh-hant="Ziwei Bazi Trend 是個人的紫微紀錄與分析 App：命盤、今日流運、心情與精力趨勢。" content="Ziwei Bazi Trend 是個人的紫微紀錄與分析 App：命盤、今日流運、心情與精力趨勢。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23fcfbfa'/%3E%3Ccircle cx='20' cy='32' r='7' fill='%23e7fec7'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ea4467'/%3E%3Ccircle cx='44' cy='32' r='7' fill='%23c6b3a2'/%3E%3C/svg%3E">
 <style>
 :root{
@@ -14,16 +14,20 @@
   --charcoal: oklch(0.25 0.010 70);
   --muted: oklch(0.43 0.012 80);
   --surface: oklch(0.95 0.005 90);
-  --surface-strong: oklch(0.92 0.008 85);
   --line: oklch(0.89 0.008 85);
   --mint: oklch(0.95 0.075 130);
+  --mint-deep: oklch(0.45 0.090 145);
   --coral: oklch(0.61 0.210 20);
   --coral-deep: oklch(0.50 0.180 20);
   --sand: oklch(0.75 0.040 70);
   --sand-soft: oklch(0.91 0.025 75);
   --focus: oklch(0.52 0.180 20);
   --shadow: 0 24px 60px oklch(0.25 0.010 70 / 0.09);
+  --phone-shadow: 0 36px 70px oklch(0.25 0.010 70 / 0.16), 0 3px 10px oklch(0.25 0.010 70 / 0.10), inset 0 0 0 1px oklch(1 0 0 / 0.14);
   --max: 1180px;
+  --ease: cubic-bezier(0.23,1,0.32,1);
+  --page-accent: var(--mint);
+  --page-accent-deep: var(--mint-deep);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:96px}
@@ -44,18 +48,17 @@ body::before{
   z-index:0;
   pointer-events:none;
   background:
-    radial-gradient(circle at 84% 8%, oklch(0.95 0.075 130 / 0.68) 0, transparent 24rem),
-    radial-gradient(circle at 4% 42%, oklch(0.75 0.040 70 / 0.22) 0, transparent 22rem);
+    radial-gradient(circle at 86% 6%, oklch(0.95 0.075 130 / 0.60) 0, transparent 26rem),
+    radial-gradient(circle at 2% 46%, oklch(0.95 0.075 130 / 0.30) 0, transparent 22rem);
 }
 ::selection{background:var(--mint);color:var(--ink)}
-body.ziwei-page{--page-accent:var(--mint)}
-body.glyco-page{--page-accent:var(--coral)}
-body.western-page{--page-accent:var(--sand)}
 a{color:inherit;text-decoration:none}
 p,li,dd,a,h1,h2,h3{overflow-wrap:break-word}
 a,button{-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:3px solid var(--focus);outline-offset:4px;border-radius:12px}
 .site-header,.site-footer,main{position:relative;z-index:1}
+/* ---------- header ---------- */
 .site-header{position:sticky;top:12px;z-index:10;padding:12px 12px 0}
 .header-inner{
   width:min(var(--max),100%);
@@ -69,22 +72,24 @@ a,button{-webkit-tap-highlight-color:transparent}
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:10px;
+  gap:8px;
+  flex-wrap:wrap;
 }
 .brand{
   min-height:44px;
   display:inline-flex;
   align-items:center;
-  padding:10px 14px;
+  padding:10px 16px;
   border-radius:999px;
-  font-size:15px;
-  font-weight:800;
-  letter-spacing:-0.02em;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:0.055em;
   white-space:nowrap;
-  transition:background-color 160ms cubic-bezier(0.23,1,0.32,1),transform 160ms cubic-bezier(0.23,1,0.32,1);
+  transition:background-color 160ms var(--ease);
 }
-.brand:hover{background:var(--surface);transform:translateY(-1px)}
-.site-nav{display:flex;align-items:center;justify-content:flex-end;gap:2px;flex-wrap:wrap}
+.brand:hover{background:var(--surface)}
+.header-right{display:flex;align-items:center;gap:2px;flex-wrap:wrap;justify-content:flex-end}
+.site-nav{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
 .site-nav a{
   min-height:44px;
   display:inline-flex;
@@ -95,11 +100,38 @@ a,button{-webkit-tap-highlight-color:transparent}
   color:var(--muted);
   font-size:14px;
   font-weight:700;
-  transition:background-color 160ms cubic-bezier(0.23,1,0.32,1),color 160ms cubic-bezier(0.23,1,0.32,1),transform 160ms cubic-bezier(0.23,1,0.32,1);
+  transition:background-color 160ms var(--ease),color 160ms var(--ease);
 }
-.site-nav a:hover{background:var(--surface);color:var(--ink);transform:translateY(-1px)}
+.site-nav a:hover{background:var(--surface);color:var(--ink)}
+.lang-switch{
+  display:inline-flex;
+  align-items:center;
+  gap:1px;
+  margin-left:6px;
+  padding:3px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--white);
+}
+.lang-switch button{
+  min-height:38px;
+  min-width:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 11px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.02em;
+  color:var(--muted);
+  transition:background-color 160ms var(--ease),color 160ms var(--ease);
+}
+.lang-switch button:hover{color:var(--ink)}
+.lang-switch button[aria-pressed="true"]{background:var(--charcoal);color:var(--paper)}
+.lang-sep{display:none}
+/* ---------- shared ---------- */
 .hero,.page-hero,.section,.detail-section,.footer-inner{width:min(var(--max),100%);margin:0 auto;padding-left:20px;padding-right:20px}
-.hero{padding-top:clamp(76px,11vw,140px);padding-bottom:clamp(58px,8vw,104px);display:grid;gap:44px}
 .kicker,.section-label,.meta-label{
   font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
   font-size:12px;
@@ -108,69 +140,6 @@ a,button{-webkit-tap-highlight-color:transparent}
   text-transform:uppercase;
   color:var(--muted);
 }
-.hero h1{
-  margin-top:20px;
-  max-width:100%;
-  font-size:clamp(3.05rem,8vw,6.8rem);
-  line-height:0.9;
-  letter-spacing:-0.068em;
-  font-weight:850;
-  text-wrap:balance;
-}
-.hero h1 .line{display:block}
-.hero-lede{
-  margin-top:28px;
-  max-width:25ch;
-  font-size:clamp(1.18rem,2.2vw,1.55rem);
-  line-height:1.35;
-  font-weight:650;
-  letter-spacing:-0.025em;
-}
-.hero-panel{border-top:1px solid var(--ink);padding-top:24px;display:grid;gap:24px;align-self:end}
-.hero-panel p{max-width:34ch;color:var(--muted);font-size:1.03rem}
-.hero-panel strong{color:var(--ink);font-weight:750}
-.panel-note{font-size:0.92rem;color:var(--muted)}
-.section{padding-top:clamp(52px,7vw,92px);padding-bottom:clamp(52px,7vw,92px)}
-.section-header{display:grid;gap:16px;margin-bottom:34px}
-.section-title{
-  max-width:12ch;
-  font-size:clamp(2.45rem,7vw,5.25rem);
-  line-height:0.96;
-  letter-spacing:-0.055em;
-  font-weight:830;
-  text-wrap:balance;
-}
-.section-intro{max-width:64ch;color:var(--muted);font-size:1.02rem}
-.app-grid{display:grid;gap:18px}
-.app-card{
-  position:relative;
-  min-height:390px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  padding:28px;
-  border:1px solid var(--line);
-  border-radius:32px;
-  background:var(--white);
-  transition:transform 180ms cubic-bezier(0.23,1,0.32,1),box-shadow 180ms cubic-bezier(0.23,1,0.32,1),border-color 180ms cubic-bezier(0.23,1,0.32,1);
-}
-.app-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:oklch(0.80 0.012 80)}
-.app-card::after{
-  content:"";
-  position:absolute;
-  top:-72px;
-  right:-72px;
-  width:184px;
-  height:184px;
-  border:1px solid currentColor;
-  border-radius:50%;
-  opacity:0.16;
-  pointer-events:none;
-}
-.app-card.ziwei{background:linear-gradient(145deg,var(--mint),var(--white) 72%)}
-.app-card.glyco{background:var(--surface);border-color:oklch(0.61 0.210 20 / 0.28)}
-.app-card.western{background:var(--sand-soft)}
-.card-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:44px}
 .status{
   min-height:32px;
   display:inline-flex;
@@ -187,87 +156,132 @@ a,button{-webkit-tap-highlight-color:transparent}
 .status.available{background:var(--mint);color:var(--ink)}
 .status.coming{background:var(--white);color:var(--coral-deep);border:1px solid oklch(0.61 0.210 20 / 0.36)}
 .status.development{background:var(--sand);color:var(--ink)}
-.app-card h3{font-size:clamp(1.8rem,4vw,2.65rem);line-height:1.02;letter-spacing:-0.045em;font-weight:820;max-width:8ch}
-.app-card .zh-name{margin-top:8px;color:var(--muted);font-weight:700}
-.app-card .description{position:relative;z-index:1;margin-top:22px;max-width:34ch;color:var(--muted)}
-.card-footer{position:relative;z-index:1;margin-top:auto;padding-top:36px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.card-link,.text-link{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  color:var(--ink);
-  font-weight:800;
-  letter-spacing:-0.01em;
+/* ---------- phone frame ---------- */
+.phone{
+  position:relative;
+  aspect-ratio:1290/2796;
+  background:linear-gradient(160deg,#45484e,#141518);
+  border-radius:12% / 5.6%;
+  padding:2.4%;
+  box-shadow:var(--phone-shadow);
 }
-.card-link span,.text-link span{transition:transform 160ms cubic-bezier(0.23,1,0.32,1)}
-.card-link:hover span,.text-link:hover span{transform:translateX(4px)}
-.card-meta{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
-.about-panel{
-  display:grid;
-  gap:30px;
-  padding:clamp(28px,5vw,56px);
-  border:1px solid var(--line);
-  border-radius:36px;
-  background:oklch(0.995 0.002 95 / 0.76);
+.phone .screen{
+  position:relative;
+  width:100%;
+  height:100%;
+  border-radius:9.4% / 4.4%;
+  overflow:hidden;
+  background:var(--white);
 }
-.about-statement{font-size:clamp(2rem,5vw,4.15rem);line-height:1.02;letter-spacing:-0.052em;font-weight:830;max-width:11ch;text-wrap:balance}
-.about-copy{border-top:1px solid var(--line);padding-top:24px;display:grid;gap:18px;color:var(--muted);max-width:62ch}
-.about-copy strong{color:var(--ink)}
-.site-footer{margin-top:36px;border-top:1px solid var(--line);background:oklch(0.95 0.005 90 / 0.58)}
-.footer-inner{padding-top:42px;padding-bottom:30px;display:grid;gap:26px}
-.footer-brand{font-size:1.2rem;font-weight:850;letter-spacing:-0.03em}
-.footer-tag{margin-top:6px;color:var(--muted);font-size:0.95rem}
-.footer-nav{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center}
-.footer-nav a{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  color:var(--muted);
-  font-size:0.95rem;
-  font-weight:700;
-  transition:color 160ms cubic-bezier(0.23,1,0.32,1);
+.phone .screen img{width:100%;height:100%;object-fit:cover;display:block}
+.phone .island{
+  position:absolute;
+  z-index:3;
+  top:3.3%;
+  left:50%;
+  transform:translateX(-50%);
+  width:27%;
+  height:2.55%;
+  background:#0c0d0f;
+  border-radius:999px;
+  pointer-events:none;
 }
-.footer-nav a:hover{color:var(--ink)}
-.copyright{color:var(--muted);font-size:0.88rem}
-/* Product pages */
-.page-hero{padding-top:clamp(66px,9vw,118px);padding-bottom:clamp(52px,7vw,86px);display:grid;gap:38px}
-.back-link{min-height:44px;display:inline-flex;align-items:center;gap:9px;color:var(--muted);font-weight:750;width:max-content;transition:color 160ms cubic-bezier(0.23,1,0.32,1)}
+/* ---------- page hero ---------- */
+.page-hero{padding-top:clamp(52px,7vw,92px);padding-bottom:clamp(44px,6vw,72px);display:grid;gap:36px}
+.back-link{min-height:44px;display:inline-flex;align-items:center;gap:9px;color:var(--muted);font-weight:750;width:max-content;transition:color 160ms var(--ease)}
 .back-link:hover{color:var(--ink)}
-.title-stack{display:grid;gap:18px}
+.title-stack{display:grid;gap:18px;margin-top:18px}
 .title-stack .status{justify-self:start}
-.page-title{font-size:clamp(3.1rem,12vw,7.6rem);line-height:0.92;letter-spacing:-0.06em;font-weight:850;text-wrap:balance}
-html[lang="zh-Hant"] .page-title{letter-spacing:-0.045em}
-.page-lede{max-width:24ch;font-size:clamp(1.32rem,3vw,2.1rem);line-height:1.24;letter-spacing:-0.032em;font-weight:730;text-wrap:balance}
-.hero-facts{align-self:end;border-top:1px solid var(--ink);padding-top:22px;display:grid;gap:18px}
+.page-title{font-size:clamp(2.9rem,10vw,6.6rem);line-height:0.94;letter-spacing:-0.055em;font-weight:850;text-wrap:balance}
+html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
+.page-lede{max-width:26ch;font-size:clamp(1.25rem,2.6vw,1.9rem);line-height:1.3;letter-spacing:-0.02em;font-weight:700;text-wrap:balance}
+.ph-visual{display:flex;justify-content:center;align-items:flex-end}
+.ph-visual .phone{width:min(70vw,300px)}
+.hero-facts{border-top:1px solid var(--ink);padding-top:22px;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 .fact{display:grid;gap:4px}
 .fact dt{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;font-size:12px;font-weight:700;letter-spacing:0.11em;text-transform:uppercase;color:var(--muted)}
 .fact dd{font-weight:750;line-height:1.35}
-.detail-section{padding-top:clamp(44px,6vw,74px);padding-bottom:clamp(44px,6vw,74px);border-top:1px solid var(--line);display:grid;gap:26px}
-.section-body{max-width:760px}
-.section-body h2{font-size:clamp(1.8rem,4vw,3rem);line-height:1.05;letter-spacing:-0.04em;font-weight:820;margin-bottom:18px;text-wrap:balance}
-.section-body p{color:var(--muted);font-size:1.03rem}
+/* ---------- detail sections ---------- */
+.detail-section{padding-top:clamp(44px,6vw,74px);padding-bottom:clamp(44px,6vw,74px);border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+.section-body{max-width:900px;min-width:0}
+.section-body h2{font-size:clamp(1.8rem,4vw,2.9rem);line-height:1.08;letter-spacing:-0.035em;font-weight:820;margin-bottom:18px;text-wrap:balance}
+.section-body p{color:var(--muted);font-size:1.03rem;max-width:62ch}
 .section-body p + p{margin-top:14px}
-.feature-list{list-style:none;display:grid;gap:0;margin-top:8px}
-.feature-list li{display:flex;gap:14px;align-items:flex-start;padding:18px 0;border-top:1px solid var(--line);font-weight:700;line-height:1.45}
-.feature-list li::before{content:"";flex:0 0 auto;width:8px;height:8px;margin-top:9px;border-radius:50%;background:var(--page-accent,var(--mint))}
-.note-grid{display:grid;gap:14px;margin-top:28px}
+/* ---------- features & notes ---------- */
+.feature-list{list-style:none;display:grid;gap:0;margin-top:22px}
+.feature-list li{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-top:1px solid var(--line);font-weight:700;line-height:1.45}
+.feature-list li::before{content:"";flex:0 0 auto;width:8px;height:8px;margin-top:9px;border-radius:50%;background:var(--page-accent-deep)}
+.note-grid{display:grid;gap:14px;margin-top:26px}
 .note-item{border-top:1px solid var(--line);padding-top:16px}
-.note-item strong{display:block;margin-bottom:4px;font-size:0.98rem}
+.note-item strong{display:block;margin-bottom:4px;font-size:0.98rem;color:var(--ink)}
 .note-item p{font-size:0.95rem}
-.screenshot-placeholder{
-  min-height:280px;
+/* ---------- flow ---------- */
+.flow{list-style:none;display:grid;gap:26px;margin-top:10px}
+.flow-step{
+  position:relative;
   display:grid;
-  place-items:center;
-  text-align:center;
-  padding:32px;
-  border:1px dashed oklch(0.70 0.018 80);
-  border-radius:32px;
-  background:
-    linear-gradient(135deg, oklch(0.995 0.002 95 / 0.72), oklch(0.95 0.005 90 / 0.72));
+  gap:8px;
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:var(--white);
 }
-.screenshot-placeholder span{display:block;font-size:clamp(1.4rem,3vw,2rem);font-weight:820;letter-spacing:-0.03em}
-.screenshot-placeholder small{display:block;margin-top:8px;color:var(--muted);font-size:0.92rem}
+.flow-num{
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:0.14em;
+  color:var(--page-accent-deep);
+}
+.flow-step h3{font-size:1.25rem;letter-spacing:-0.015em;font-weight:800}
+.flow-step p{font-size:0.95rem}
+@media (min-width:760px){
+  .flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:34px}
+  .flow-step:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    right:-24px;
+    width:12px;
+    height:12px;
+    border-top:2.5px solid var(--page-accent-deep);
+    border-right:2.5px solid var(--page-accent-deep);
+    transform:translateY(-50%) rotate(45deg);
+  }
+}
+@media (max-width:759px){
+  .flow-step:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-20px;
+    width:12px;
+    height:12px;
+    border-bottom:2.5px solid var(--page-accent-deep);
+    border-right:2.5px solid var(--page-accent-deep);
+    transform:translateX(-50%) rotate(45deg);
+  }
+}
+/* ---------- gallery ---------- */
+.gallery{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:min(62vw,280px);
+  gap:26px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  padding:14px 6px 30px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--muted) transparent;
+}
+.shot{scroll-snap-align:start;display:grid;gap:14px;align-content:start}
+.shot figcaption{display:grid;gap:2px}
+.shot figcaption strong{font-size:0.98rem;font-weight:780}
+.shot figcaption span{font-size:0.88rem;color:var(--muted)}
+@media (min-width:1024px){
+  .gallery{grid-auto-flow:initial;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible;grid-auto-columns:auto}
+}
+/* ---------- download ---------- */
 .download-panel{
   display:grid;
   gap:22px;
@@ -277,9 +291,8 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.045em}
   background:var(--surface);
 }
 .download-panel.available{background:var(--mint)}
-.download-panel.coming{background:var(--white);border-color:oklch(0.61 0.210 20 / 0.28)}
-.download-panel.development{background:var(--sand-soft)}
 .download-copy h2{margin-bottom:8px}
+.download-copy p{color:oklch(0.35 0.02 100)}
 .button-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .button{
   min-height:48px;
@@ -294,50 +307,51 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.045em}
   color:var(--paper);
   font-weight:800;
   line-height:1.2;
-  transition:transform 160ms cubic-bezier(0.23,1,0.32,1),background-color 160ms cubic-bezier(0.23,1,0.32,1),color 160ms cubic-bezier(0.23,1,0.32,1);
+  transition:transform 160ms var(--ease),background-color 160ms var(--ease);
 }
 .button:hover{transform:translateY(-2px);background:var(--ink)}
 .button.secondary{background:transparent;color:var(--ink)}
-.button.secondary:hover{background:var(--white);color:var(--ink)}
-.status-box{display:grid;gap:8px;max-width:54ch}
-.status-box strong{font-size:1.25rem;letter-spacing:-0.02em}
-.status-box p{color:var(--muted)}
+.button.secondary:hover{background:var(--white)}
 .back-row{padding-top:12px;padding-bottom:24px}
+/* ---------- footer ---------- */
+.site-footer{margin-top:36px;border-top:1px solid var(--line);background:oklch(0.95 0.005 90 / 0.58)}
+.footer-inner{padding-top:42px;padding-bottom:30px;display:grid;gap:26px}
+.footer-brand{font-size:1.05rem;font-weight:750;letter-spacing:0.05em}
+.footer-tag{margin-top:6px;color:var(--muted);font-size:0.95rem}
+.footer-nav{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center}
+.footer-nav a{
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  color:var(--muted);
+  font-size:0.95rem;
+  font-weight:700;
+  transition:color 160ms var(--ease);
+}
+.footer-nav a:hover{color:var(--ink)}
+.copyright{color:var(--muted);font-size:0.88rem}
 @media (min-width:520px){
   .header-inner{border-radius:999px}
-  .hero-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .note-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (min-width:760px){
-  .app-grid{grid-template-columns:repeat(12,minmax(0,1fr))}
-  .app-card{grid-column:span 6}
-  .app-card.western{grid-column:span 12;min-height:340px}
-  .feature-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
   .footer-inner{grid-template-columns:1fr auto;align-items:start}
   .copyright{grid-column:1/-1}
   .download-panel{grid-template-columns:1fr auto;align-items:center}
+  .feature-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
 }
 @media (min-width:900px){
-  .hero{grid-template-columns:minmax(0,1.12fr) minmax(280px,0.88fr);align-items:end}
-  .page-hero{grid-template-columns:minmax(0,1fr) minmax(280px,0.52fr);align-items:end}
-  .section-header{grid-template-columns:220px minmax(0,1fr);align-items:end}
-  .section-intro{grid-column:2}
-  .about-panel{grid-template-columns:0.9fr 1.1fr;align-items:start}
+  .page-hero{grid-template-columns:minmax(0,1fr) 320px;column-gap:56px;align-items:center}
+  .hero-facts{grid-column:1/-1}
   .detail-section{grid-template-columns:230px minmax(0,1fr);gap:56px}
-}
-@media (min-width:1100px){
-  .app-card{grid-column:span 5}
-  .app-card.glyco{grid-column:span 4;margin-top:40px}
-  .app-card.western{grid-column:span 3;margin-top:80px;min-height:390px}
 }
 @media (max-width:420px){
   .site-header{top:8px;padding:8px 8px 0}
-  .header-inner{padding:5px;gap:4px}
-  .brand{padding-left:10px;padding-right:10px;font-size:14px}
+  .header-inner{padding:5px;gap:4px;justify-content:center}
+  .brand{padding-left:10px;padding-right:10px;font-size:15px}
+  .header-right{justify-content:center}
   .site-nav a{padding-left:9px;padding-right:9px;font-size:13px}
   .hero,.page-hero,.section,.detail-section,.footer-inner{padding-left:16px;padding-right:16px}
-  .app-card{padding:24px;min-height:360px}
-  .card-top{margin-bottom:34px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -345,106 +359,204 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.045em}
 }
 </style>
 </head>
-<body class="ziwei-page">
+<body>
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="index.html" aria-label="lwbro studio home">lwbro studio</a>
-    <nav class="site-nav" aria-label="Primary navigation">
-      <a href="index.html#apps">Apps</a>
-      <a href="index.html#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="header-right">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html#apps" data-en="Apps" data-zh-hant="Apps">Apps</a>
+        <a href="index.html#studio" data-en="Studio" data-zh-hant="工作室">工作室</a>
+        <a href="#contact" data-en="Contact" data-zh-hant="聯絡">聯絡</a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Language 語言">
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <span class="lang-sep" aria-hidden="true">|</span>
+        <button type="button" data-lang="zh-Hant" aria-pressed="true">繁中</button>
+      </div>
+    </div>
   </div>
 </header>
 <main>
   <section class="page-hero" aria-labelledby="app-title">
     <div>
-      <a class="back-link" href="index.html"><span aria-hidden="true">←</span> Back to lwbro studio</a>
+      <a class="back-link" href="index.html"><span aria-hidden="true">←</span> <span data-en="Back to lwbro studio" data-zh-hant="回到 lwbro studio">回到 lwbro studio</span></a>
       <div class="title-stack">
-        <span class="status available">Available / 已上架</span>
+        <span class="status available" data-en="Available" data-zh-hant="已上架">已上架</span>
         <h1 class="page-title" id="app-title">Ziwei Bazi Trend</h1>
-        <p class="page-lede">個人的紫微紀錄與分析 — 幫你看見屬於自己的紫微軌跡。</p>
+        <p class="page-lede" data-en="A personal Ziwei record &amp; analysis app — see the trail of your own chart over time." data-zh-hant="個人的紫微紀錄與分析 — 幫你看見屬於自己的紫微軌跡。">個人的紫微紀錄與分析 — 幫你看見屬於自己的紫微軌跡。</p>
+      </div>
+    </div>
+    <div class="ph-visual">
+      <div class="phone">
+        <span class="island"></span>
+        <div class="screen"><img src="assets/ziwei/01-home.png" alt="Ziwei Bazi Trend — 今日流運主畫面" data-alt-en="Ziwei Bazi Trend — today's flow home screen" data-alt-zh-hant="Ziwei Bazi Trend — 今日流運主畫面"></div>
       </div>
     </div>
     <dl class="hero-facts" aria-label="App facts">
-      <div class="fact"><dt>Status</dt><dd>Available on the App Store</dd></div>
-      <div class="fact"><dt>Price</dt><dd>免費</dd></div>
-      <div class="fact"><dt>Devices</dt><dd>iPhone + iPad</dd></div>
-      <div class="fact"><dt>System</dt><dd>iOS 15 以上</dd></div>
-      <div class="fact"><dt>Language</dt><dd>繁體中文</dd></div>
+      <div class="fact"><dt data-en="Status" data-zh-hant="狀態">狀態</dt><dd data-en="Available on the App Store" data-zh-hant="已上架 App Store">已上架 App Store</dd></div>
+      <div class="fact"><dt data-en="Price" data-zh-hant="價格">價格</dt><dd data-en="Free" data-zh-hant="免費">免費</dd></div>
+      <div class="fact"><dt data-en="Devices" data-zh-hant="裝置">裝置</dt><dd>iPhone + iPad</dd></div>
+      <div class="fact"><dt data-en="System" data-zh-hant="系統">系統</dt><dd data-en="iOS 15 or later" data-zh-hant="iOS 15 以上">iOS 15 以上</dd></div>
+      <div class="fact"><dt data-en="Language" data-zh-hant="語言">語言</dt><dd data-en="Traditional Chinese" data-zh-hant="繁體中文">繁體中文</dd></div>
     </dl>
   </section>
 
   <section class="detail-section" aria-labelledby="overview-title">
-    <div class="section-side"><p class="section-label">Overview</p></div>
+    <div class="section-side"><p class="section-label" data-en="Overview" data-zh-hant="概覽">概覽</p></div>
     <div class="section-body">
-      <h2 id="overview-title">把命盤、流運與日常狀態放在一起。</h2>
-      <p>Ziwei Bazi Trend 是一款個人的紫微紀錄與分析 App。它將紫微命盤、八字四柱、今日流運與心情精力紀錄放在同一個地方，讓每天留下的狀態，能在時間中被回顧與比較。</p>
-      <p>這不是熱鬧的運勢平台，而是一個安靜的個人工具：記錄、對照、看見自己的節奏。</p>
-    </div>
-  </section>
-
-  <section class="detail-section" aria-labelledby="features-title">
-    <div class="section-side"><p class="section-label">Features</p></div>
-    <div class="section-body">
-      <h2 id="features-title">主要功能</h2>
+      <h2 id="overview-title" data-en="Charts, daily flow, and daily state — in one place." data-zh-hant="把命盤、流運與日常狀態放在一起。">把命盤、流運與日常狀態放在一起。</h2>
+      <p data-en="Ziwei Bazi Trend is a personal Ziwei record and analysis app. It keeps your Ziwei chart, Bazi four pillars, today’s flow, and mood-energy notes in one place, so the state you record each day can be reviewed and compared over time." data-zh-hant="Ziwei Bazi Trend 是一款個人的紫微紀錄與分析 App。它將紫微命盤、八字四柱、今日流運與心情精力紀錄放在同一個地方，讓每天留下的狀態，能在時間中被回顧與比較。">Ziwei Bazi Trend 是一款個人的紫微紀錄與分析 App。它將紫微命盤、八字四柱、今日流運與心情精力紀錄放在同一個地方，讓每天留下的狀態，能在時間中被回顧與比較。</p>
+      <p data-en="Not a noisy fortune platform — a quiet personal tool: record, compare, and see your own rhythm." data-zh-hant="這不是熱鬧的運勢平台，而是一個安靜的個人工具：記錄、對照、看見自己的節奏。">這不是熱鬧的運勢平台，而是一個安靜的個人工具：記錄、對照、看見自己的節奏。</p>
       <ul class="feature-list">
-        <li>紫微命盤</li>
-        <li>八字四柱</li>
-        <li>今日流運</li>
-        <li>14 天流日預覽</li>
-        <li>心情與精力紀錄</li>
-        <li>日誌統計與趨勢</li>
+        <li data-en="Ziwei natal chart" data-zh-hant="紫微命盤">紫微命盤</li>
+        <li data-en="Bazi four pillars" data-zh-hant="八字四柱">八字四柱</li>
+        <li data-en="Today’s flow" data-zh-hant="今日流運">今日流運</li>
+        <li data-en="14-day flow preview" data-zh-hant="14 天流日預覽">14 天流日預覽</li>
+        <li data-en="Mood &amp; energy journal" data-zh-hant="心情與精力紀錄">心情與精力紀錄</li>
+        <li data-en="Journal statistics &amp; trends" data-zh-hant="日誌統計與趨勢">日誌統計與趨勢</li>
       </ul>
       <div class="note-grid" aria-label="Privacy and offline features">
-        <div class="note-item"><strong>免登入</strong><p>打開 App 就能開始記錄。</p></div>
-        <div class="note-item"><strong>紀錄只留在你的裝置上</strong><p>個人日誌與狀態不需要交給雲端帳號。</p></div>
-        <div class="note-item"><strong>離線推算</strong><p>支援離線命盤與流運推算。</p></div>
+        <div class="note-item"><strong data-en="No sign-in" data-zh-hant="免登入">免登入</strong><p data-en="Open the app and start recording." data-zh-hant="打開 App 就能開始記錄。">打開 App 就能開始記錄。</p></div>
+        <div class="note-item"><strong data-en="Records stay on your device" data-zh-hant="紀錄只留在你的裝置上">紀錄只留在你的裝置上</strong><p data-en="Your journal and notes don’t need a cloud account." data-zh-hant="個人日誌與狀態不需要交給雲端帳號。">個人日誌與狀態不需要交給雲端帳號。</p></div>
+        <div class="note-item"><strong data-en="Offline calculation" data-zh-hant="離線推算">離線推算</strong><p data-en="Charts and daily flow work offline." data-zh-hant="支援離線命盤與流運推算。">支援離線命盤與流運推算。</p></div>
       </div>
     </div>
   </section>
 
-  <section class="detail-section" aria-labelledby="screenshots-title">
-    <div class="section-side"><p class="section-label">Screenshots</p></div>
+  <section class="detail-section" aria-labelledby="flow-title">
+    <div class="section-side"><p class="section-label" data-en="How it works" data-zh-hant="使用流程">使用流程</p></div>
     <div class="section-body">
-      <h2 id="screenshots-title">App 截圖</h2>
-      <div class="screenshot-placeholder" role="img" aria-label="截圖即將上線">
-        <div><span>截圖即將上線</span><small>Screenshots coming soon.</small></div>
+      <h2 id="flow-title" data-en="Three steps, once a day." data-zh-hant="三個步驟，每天一次。">三個步驟，每天一次。</h2>
+      <ol class="flow">
+        <li class="flow-step">
+          <span class="flow-num">01</span>
+          <h3 data-en="Enter birth details" data-zh-hant="輸入生辰">輸入生辰</h3>
+          <p data-en="Birth date and time — set once." data-zh-hant="出生年月日時，只需設定一次。">出生年月日時，只需設定一次。</p>
+        </li>
+        <li class="flow-step">
+          <span class="flow-num">02</span>
+          <h3 data-en="Generate your chart" data-zh-hant="生成命盤">生成命盤</h3>
+          <p data-en="Ziwei chart with Bazi four pillars, calculated offline." data-zh-hant="紫微命盤與八字四柱，支援離線推算。">紫微命盤與八字四柱，支援離線推算。</p>
+        </li>
+        <li class="flow-step">
+          <span class="flow-num">03</span>
+          <h3 data-en="Daily flow + track trends" data-zh-hant="每日流運＋紀錄趨勢">每日流運＋紀錄趨勢</h3>
+          <p data-en="Note your mood and energy each day, then review the trend." data-zh-hant="每天記下心情與精力，之後回頭看趨勢。">每天記下心情與精力，之後回頭看趨勢。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="detail-section" aria-labelledby="screenshots-title">
+    <div class="section-side"><p class="section-label" data-en="Screenshots" data-zh-hant="截圖">截圖</p></div>
+    <div class="section-body" style="max-width:none">
+      <h2 id="screenshots-title" data-en="Inside the app." data-zh-hant="App 裡的樣子。">App 裡的樣子。</h2>
+      <div class="gallery" tabindex="0" role="region" aria-label="App screenshots">
+        <figure class="shot">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen"><img src="assets/ziwei/01-home.png" alt="今日流運" data-alt-en="Today’s flow — the daily home screen" data-alt-zh-hant="今日流運 — 每天打開的主畫面"></div>
+          </div>
+          <figcaption><strong data-en="Today’s Flow" data-zh-hant="今日流運">今日流運</strong><span data-en="The screen you open every day." data-zh-hant="每天打開的主畫面。">每天打開的主畫面。</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen"><img src="assets/ziwei/02-birth-profile.png" alt="生辰設定" data-alt-en="Birth profile — enter birth details" data-alt-zh-hant="生辰設定 — 輸入出生資料"></div>
+          </div>
+          <figcaption><strong data-en="Birth Profile" data-zh-hant="生辰設定">生辰設定</strong><span data-en="Enter birth details once." data-zh-hant="輸入出生資料，只需一次。">輸入出生資料，只需一次。</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen"><img src="assets/ziwei/03-ziwei-chart.png" alt="本命盤" data-alt-en="Ziwei natal chart" data-alt-zh-hant="本命盤 — 紫微命盤"></div>
+          </div>
+          <figcaption><strong data-en="Ziwei Chart" data-zh-hant="本命盤">本命盤</strong><span data-en="The Ziwei natal chart." data-zh-hant="紫微命盤上半。">紫微命盤上半。</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen"><img src="assets/ziwei/04-bazi-analysis.png" alt="八字分析" data-alt-en="Bazi analysis — four pillars" data-alt-zh-hant="八字分析 — 本命盤下半"></div>
+          </div>
+          <figcaption><strong data-en="Bazi Analysis" data-zh-hant="八字分析">八字分析</strong><span data-en="Four pillars, below the chart." data-zh-hant="本命盤下半的八字四柱。">本命盤下半的八字四柱。</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen"><img src="assets/ziwei/05-journal-trends.png" alt="趨勢分析" data-alt-en="Journal trends — statistics over time" data-alt-zh-hant="趨勢分析 — 日誌與狀態趨勢"></div>
+          </div>
+          <figcaption><strong data-en="Journal Trends" data-zh-hant="趨勢分析">趨勢分析</strong><span data-en="Statistics and trends from your journal." data-zh-hant="從日誌累積出的統計與趨勢。">從日誌累積出的統計與趨勢。</span></figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
   <section class="detail-section" aria-labelledby="download-title">
-    <div class="section-side"><p class="section-label">Download</p></div>
+    <div class="section-side"><p class="section-label" data-en="Download" data-zh-hant="下載">下載</p></div>
     <div class="download-panel available">
       <div class="download-copy">
-        <h2 id="download-title">Download on the App Store</h2>
-        <p>免費下載。支援 iPhone 與 iPad，需要 iOS 15 以上。</p>
+        <h2 id="download-title" data-en="Download on the App Store" data-zh-hant="App Store 下載">App Store 下載</h2>
+        <p data-en="Free. Works on iPhone and iPad, requires iOS 15 or later." data-zh-hant="免費下載。支援 iPhone 與 iPad，需要 iOS 15 以上。">免費下載。支援 iPhone 與 iPad，需要 iOS 15 以上。</p>
       </div>
       <div class="button-row">
-        <a class="button" href="https://apps.apple.com/tw/app/id6826422087" target="_blank" rel="noopener noreferrer">台灣 App Store</a>
+        <a class="button" href="https://apps.apple.com/tw/app/id6826422087" target="_blank" rel="noopener noreferrer" data-en="Taiwan App Store" data-zh-hant="台灣 App Store">台灣 App Store</a>
         <a class="button secondary" href="https://apps.apple.com/us/app/ziwei-bazi-trend/id6826422087" target="_blank" rel="noopener noreferrer">US App Store</a>
       </div>
     </div>
   </section>
 
   <div class="detail-section back-row">
-    <a class="text-link" href="index.html"><span aria-hidden="true">←</span> Back to lwbro studio</a>
+    <a class="text-link" href="index.html"><span aria-hidden="true">←</span> <span data-en="Back to lwbro studio" data-zh-hant="回到 lwbro studio">回到 lwbro studio</span></a>
   </div>
 </main>
 <footer class="site-footer" id="contact">
   <div class="footer-inner">
     <div>
       <p class="footer-brand">lwbro studio</p>
-      <p class="footer-tag">Personal record &amp; analysis apps.</p>
+      <p class="footer-tag" data-en="Personal record &amp; analysis apps." data-zh-hant="個人紀錄與分析 App。">個人紀錄與分析 App。</p>
     </div>
     <nav class="footer-nav" aria-label="Footer navigation">
-      <a href="https://lwbroo.github.io/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-      <a href="https://lwbroo.github.io/privacy/support.html" target="_blank" rel="noopener noreferrer">Support</a>
+      <a href="https://lwbroo.github.io/privacy/" target="_blank" rel="noopener noreferrer" data-en="Privacy Policy" data-zh-hant="隱私政策">隱私政策</a>
+      <a href="https://lwbroo.github.io/privacy/support.html" target="_blank" rel="noopener noreferrer" data-en="Support" data-zh-hant="支援">支援</a>
       <a href="mailto:lwbro@me.com">lwbro@me.com</a>
     </nav>
     <p class="copyright">© 2026 Kurt Chiang / lwbro studio</p>
   </div>
 </footer>
+<script>
+(function(){
+  var KEY='lwbro-lang';
+  var DEFAULT='zh-Hant';
+  function apply(lang,persist){
+    var zh=(lang==='zh-Hant');
+    document.documentElement.setAttribute('lang',zh?'zh-Hant':'en');
+    var nodes=document.querySelectorAll('[data-en][data-zh-hant]');
+    for(var i=0;i<nodes.length;i++){
+      nodes[i].textContent=nodes[i].getAttribute(zh?'data-zh-hant':'data-en');
+    }
+    var imgs=document.querySelectorAll('[data-alt-en][data-alt-zh-hant]');
+    for(var j=0;j<imgs.length;j++){
+      imgs[j].setAttribute('alt',imgs[j].getAttribute(zh?'data-alt-zh-hant':'data-alt-en'));
+    }
+    var title=document.querySelector('title[data-en][data-zh-hant]');
+    if(title){document.title=title.getAttribute(zh?'data-zh-hant':'data-en');}
+    var meta=document.querySelector('meta[name="description"][data-en]');
+    if(meta){meta.setAttribute('content',meta.getAttribute(zh?'data-zh-hant':'data-en'));}
+    var btns=document.querySelectorAll('.lang-switch [data-lang]');
+    for(var k=0;k<btns.length;k++){
+      btns[k].setAttribute('aria-pressed',String(btns[k].getAttribute('data-lang')===lang));
+    }
+    if(persist){try{localStorage.setItem(KEY,lang);}catch(e){}}
+  }
+  var btns=document.querySelectorAll('.lang-switch [data-lang]');
+  for(var k=0;k<btns.length;k++){
+    btns[k].addEventListener('click',function(){apply(this.getAttribute('data-lang'),true);});
+  }
+  var saved=null;
+  try{saved=localStorage.getItem(KEY);}catch(e){}
+  apply((saved==='zh-Hant'||saved==='en')?saved:DEFAULT);
+})();
+</script>
 </body>
 </html>
