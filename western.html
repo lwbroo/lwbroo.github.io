@@ -5,365 +5,246 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-en="Western Astrology App (Name TBD) — lwbro studio" data-zh-hant="西洋星盤 App（名稱未定）— lwbro studio">Western Astrology App (Name TBD) — lwbro studio</title>
 <meta name="description" data-en="A personal Western astrology journal — natal chart, planetary positions, daily transits, and mood-energy tracking. In development." data-zh-hant="個人的西洋星盤紀錄 App — 本命星盤、行星位置、每日行運與心情精力追蹤。開發中。" content="A personal Western astrology journal — natal chart, planetary positions, daily transits, and mood-energy tracking. In development.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23fcfbfa'/%3E%3Ccircle cx='20' cy='32' r='7' fill='%23e7fec7'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ea4467'/%3E%3Ccircle cx='44' cy='32' r='7' fill='%23c6b3a2'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FAF8F5'/%3E%3Ccircle cx='20' cy='32' r='7' fill='%237FB08A'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23C0563F'/%3E%3Ccircle cx='44' cy='32' r='7' fill='%23B3A08B'/%3E%3C/svg%3E">
 <style>
+/* ================= v3 design tokens (shared across all 4 pages) ================= */
 :root{
-  --paper: oklch(0.985 0.003 95);
-  --white: oklch(0.995 0.002 95);
-  --ink: oklch(0.22 0.006 90);
-  --charcoal: oklch(0.25 0.010 70);
-  --muted: oklch(0.43 0.012 80);
-  --surface: oklch(0.95 0.005 90);
-  --line: oklch(0.89 0.008 85);
-  --mint: oklch(0.95 0.075 130);
-  --coral: oklch(0.61 0.210 20);
-  --coral-deep: oklch(0.50 0.180 20);
-  --sand: oklch(0.75 0.040 70);
-  --sand-soft: oklch(0.91 0.025 75);
-  --sand-deep: oklch(0.45 0.045 65);
-  --focus: oklch(0.52 0.180 20);
-  --shadow: 0 24px 60px oklch(0.25 0.010 70 / 0.09);
-  --phone-shadow: 0 36px 70px oklch(0.25 0.010 70 / 0.16), 0 3px 10px oklch(0.25 0.010 70 / 0.10), inset 0 0 0 1px oklch(1 0 0 / 0.14);
-  --max: 1180px;
-  --ease: cubic-bezier(0.23,1,0.32,1);
-  --page-accent: var(--sand-soft);
-  --page-accent-deep: var(--sand-deep);
+  --paper:#FAF8F5;
+  --card:#EFECE6;
+  --ink:#1C1B19;
+  --muted:#5C5852;
+  --accent:#2D4A3E;
+  --white:#FDFCF9;
+  --line:#DED8CE;
+  --tint-ziwei:#E7EEE3;
+  --tint-glyco:#F3E6DE;
+  --tint-western:#EFE7D8;
+  --ziwei-deep:#35704F;
+  --coral-deep:#A84A38;
+  --sand-deep:#6F6250;
+  --focus:#2D4A3E;
+  --shadow:0 24px 60px rgba(28,27,25,.09);
+  --phone-shadow:0 36px 70px rgba(28,27,25,.16),0 3px 10px rgba(28,27,25,.10),inset 0 0 0 1px rgba(255,255,255,.14);
+  --max:1180px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --page-tint:var(--tint-western);
+  --page-deep:var(--sand-deep);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:96px}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{
-  min-height:100dvh;
-  color:var(--ink);
-  background:var(--paper);
+  min-height:100dvh;color:var(--ink);background:var(--paper);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI","PingFang TC","PingFang SC","Microsoft JhengHei","Microsoft YaHei",sans-serif;
-  font-size:16px;
-  line-height:1.65;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
+  font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
+html[lang="zh-Hant"] body{line-height:1.72}
+html[lang="zh-Hant"] .prose p + p{margin-top:20px}
 body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(circle at 86% 6%, oklch(0.91 0.025 75 / 0.75) 0, transparent 26rem),
-    radial-gradient(circle at 2% 46%, oklch(0.91 0.025 75 / 0.40) 0, transparent 22rem);
+    radial-gradient(circle at 88% 4%, rgba(239,231,216,.95) 0, transparent 26rem),
+    radial-gradient(circle at 0% 46%, rgba(239,231,216,.55) 0, transparent 24rem);
 }
-::selection{background:var(--sand-soft);color:var(--ink)}
+::selection{background:var(--tint-western);color:var(--ink)}
 a{color:inherit;text-decoration:none}
 p,li,dd,a,h1,h2,h3{overflow-wrap:break-word}
 a,button{-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-:focus-visible{outline:3px solid var(--focus);outline-offset:4px;border-radius:12px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:10px}
 .site-header,.site-footer,main{position:relative;z-index:1}
-/* ---------- header ---------- */
-.site-header{position:sticky;top:12px;z-index:10;padding:12px 12px 0}
-.header-inner{
-  width:min(var(--max),100%);
-  margin:0 auto;
-  padding:6px;
-  border:1px solid oklch(0.89 0.008 85 / 0.82);
-  border-radius:30px;
-  background:oklch(0.995 0.002 95 / 0.88);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  flex-wrap:wrap;
+/* ================= sticky header — 64px, blurred warm white ================= */
+.site-header{
+  position:sticky;top:0;z-index:20;height:64px;display:flex;align-items:center;
+  background:rgba(250,248,245,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(28,27,25,.07);
 }
-.brand{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  padding:10px 16px;
-  border-radius:999px;
-  font-size:16px;
-  font-weight:700;
-  letter-spacing:0.055em;
-  white-space:nowrap;
-  transition:background-color 160ms var(--ease);
+.header-inner{width:min(var(--max),100%);height:64px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{min-height:44px;display:inline-flex;align-items:center;font-size:16px;font-weight:700;letter-spacing:.055em;white-space:nowrap;border-radius:10px;padding:6px 2px;transition:color .2s var(--ease)}
+.brand:hover{color:var(--accent)}
+.header-right{display:flex;align-items:center;gap:4px}
+.site-nav{display:flex;align-items:center;gap:2px}
+.site-nav > a,.nav-apps > button{
+  min-height:44px;display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:10px;
+  color:var(--muted);font-size:14px;font-weight:700;transition:color .2s var(--ease),background-color .2s var(--ease);
 }
-.brand:hover{background:var(--surface)}
-.header-right{display:flex;align-items:center;gap:2px;flex-wrap:wrap;justify-content:flex-end}
-.site-nav{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
-.site-nav a{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:10px 13px;
-  border-radius:999px;
-  color:var(--muted);
-  font-size:14px;
-  font-weight:700;
-  transition:background-color 160ms var(--ease),color 160ms var(--ease);
+.site-nav > a:hover,.nav-apps > button:hover{color:var(--ink);background:rgba(28,27,25,.05)}
+.nav-apps{position:relative}
+.nav-apps .chev{width:10px;height:10px;transition:transform .2s var(--ease)}
+.nav-apps > button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.apps-menu{
+  position:absolute;top:calc(100% + 8px);right:0;min-width:264px;display:none;gap:2px;padding:6px;
+  background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 44px rgba(28,27,25,.13);
 }
-.site-nav a:hover{background:var(--surface);color:var(--ink)}
-.lang-switch{
-  display:inline-flex;
-  align-items:center;
-  gap:1px;
-  margin-left:6px;
-  padding:3px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:var(--white);
-}
+.apps-menu.open{display:grid}
+.apps-menu a{display:grid;gap:2px;padding:11px 12px;border-radius:11px;transition:background-color .16s var(--ease)}
+.apps-menu a:hover{background:var(--card)}
+.apps-menu .m-name{font-weight:750;font-size:14.5px;letter-spacing:-.01em}
+.apps-menu .m-status{font-size:12px;color:var(--muted);font-weight:600}
+.lang-switch{display:inline-flex;align-items:center;gap:1px;margin-left:8px;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--white)}
 .lang-switch button{
-  min-height:38px;
-  min-width:44px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:6px 11px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:0.02em;
-  color:var(--muted);
-  transition:background-color 160ms var(--ease),color 160ms var(--ease);
+  min-height:36px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;
+  padding:5px 11px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.02em;
+  color:var(--muted);transition:background-color .2s var(--ease),color .2s var(--ease);
 }
 .lang-switch button:hover{color:var(--ink)}
-.lang-switch button[aria-pressed="true"]{background:var(--charcoal);color:var(--paper)}
-.lang-sep{display:none}
-/* ---------- shared ---------- */
-.hero,.page-hero,.section,.detail-section,.footer-inner{width:min(var(--max),100%);margin:0 auto;padding-left:20px;padding-right:20px}
-.kicker,.section-label,.meta-label{
+.lang-switch button[aria-pressed="true"]{background:var(--accent);color:var(--paper)}
+/* ================= shared ================= */
+.page-hero,.section,.detail-section,.footer-inner{width:min(var(--max),100%);margin:0 auto;padding-left:20px;padding-right:20px}
+.kicker,.section-label{
   font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:var(--muted);
+  font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
 }
-.status{
-  min-height:32px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  line-height:1.2;
-  font-weight:800;
-  white-space:nowrap;
-}
+.status{min-height:30px;display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;font-size:12px;line-height:1.2;font-weight:800;white-space:nowrap}
 .status::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.status.available{background:var(--mint);color:var(--ink)}
-.status.coming{background:var(--white);color:var(--coral-deep);border:1px solid oklch(0.61 0.210 20 / 0.36)}
-.status.development{background:var(--sand);color:var(--ink)}
-/* ---------- phone frame ---------- */
-.phone{
-  position:relative;
-  aspect-ratio:1290/2796;
-  background:linear-gradient(160deg,#45484e,#141518);
-  border-radius:12% / 5.6%;
-  padding:2.4%;
-  box-shadow:var(--phone-shadow);
-}
-.phone .screen{
-  position:relative;
-  width:100%;
-  height:100%;
-  border-radius:9.4% / 4.4%;
-  overflow:hidden;
-  background:var(--white);
-}
-.phone .screen img{width:100%;height:100%;object-fit:cover;display:block}
+.status.available{background:var(--tint-ziwei);color:var(--ziwei-deep)}
+.status.coming{background:var(--white);color:var(--coral-deep);border:1px solid rgba(168,74,56,.36)}
+.status.development{background:var(--tint-western);color:var(--sand-deep)}
+/* ================= phone frame ================= */
+.phone{position:relative;aspect-ratio:1290/2796;background:linear-gradient(160deg,#45484e,#141518);border-radius:12% / 5.6%;padding:2.4%;box-shadow:var(--phone-shadow)}
+.phone .screen{position:relative;width:100%;height:100%;border-radius:9.4% / 4.4%;overflow:hidden;background:var(--white)}
 .phone .screen svg{display:block;width:100%;height:100%}
-.phone .island{
-  position:absolute;
-  z-index:3;
-  top:3.3%;
-  left:50%;
-  transform:translateX(-50%);
-  width:27%;
-  height:2.55%;
-  background:#0c0d0f;
-  border-radius:999px;
-  pointer-events:none;
-}
+.phone .island{position:absolute;z-index:3;top:3.3%;left:50%;transform:translateX(-50%);width:27%;height:2.55%;background:#0c0d0f;border-radius:999px;pointer-events:none}
 .phone .preview-badge{
-  position:absolute;
-  z-index:4;
-  left:50%;
-  bottom:5%;
-  transform:translateX(-50%);
-  padding:5px 12px;
-  border-radius:999px;
-  background:oklch(0.25 0.010 70 / 0.82);
-  color:var(--paper);
-  font-size:clamp(9px,1.1vw,12px);
-  font-weight:700;
-  letter-spacing:0.04em;
-  white-space:nowrap;
-  pointer-events:none;
+  position:absolute;z-index:4;left:50%;bottom:5%;transform:translateX(-50%);
+  padding:5px 12px;border-radius:999px;background:rgba(28,27,25,.82);color:var(--paper);
+  font-size:clamp(9px,1.1vw,12px);font-weight:700;letter-spacing:.04em;white-space:nowrap;pointer-events:none;
 }
-/* ---------- page hero ---------- */
-.page-hero{padding-top:clamp(52px,7vw,92px);padding-bottom:clamp(44px,6vw,72px);display:grid;gap:36px}
-.back-link{min-height:44px;display:inline-flex;align-items:center;gap:9px;color:var(--muted);font-weight:750;width:max-content;transition:color 160ms var(--ease)}
-.back-link:hover{color:var(--ink)}
-.title-stack{display:grid;gap:18px;margin-top:18px}
-.title-stack .status{justify-self:start}
-.page-title{font-size:clamp(2.9rem,10vw,6.6rem);line-height:0.94;letter-spacing:-0.055em;font-weight:850;text-wrap:balance}
-html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
-.page-lede{max-width:26ch;font-size:clamp(1.25rem,2.6vw,1.9rem);line-height:1.3;letter-spacing:-0.02em;font-weight:700;text-wrap:balance}
+/* ================= app icon marks ================= */
+.app-icon{width:56px;height:56px;border-radius:15px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(28,27,25,.08)}
+.app-icon svg{display:block}
+.app-icon.ziwei{background:var(--tint-ziwei)}
+.app-icon.western{background:var(--tint-western)}
+/* ================= 1) page hero + status ================= */
+.page-hero{padding-top:clamp(48px,6vw,84px);padding-bottom:clamp(44px,6vw,72px);display:grid;gap:36px}
+.title-stack{display:grid;gap:18px;justify-items:start}
+.page-title{font-size:clamp(2.6rem,7vw,5rem);line-height:.98;letter-spacing:-.045em;font-weight:850;text-wrap:balance}
+html[lang="zh-Hant"] .page-title{letter-spacing:-.01em;line-height:1.06}
+.page-lede{max-width:30ch;font-size:clamp(1.15rem,2.2vw,1.6rem);line-height:1.35;letter-spacing:-.015em;font-weight:700;text-wrap:balance}
+html[lang="zh-Hant"] .page-lede{line-height:1.6}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px}
+.status-note{
+  display:inline-flex;align-items:center;gap:9px;min-height:54px;padding:12px 18px;
+  border-radius:15px;background:var(--card);color:var(--muted);font-weight:700;font-size:.98rem;line-height:1.35;
+}
+.status-note::before{content:"";flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:var(--sand-deep)}
 .ph-visual{display:flex;justify-content:center;align-items:flex-end}
-.ph-visual .phone{width:min(70vw,300px)}
+.ph-visual .phone{width:min(66vw,290px)}
 .hero-facts{border-top:1px solid var(--ink);padding-top:22px;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 .fact{display:grid;gap:4px}
-.fact dt{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;font-size:12px;font-weight:700;letter-spacing:0.11em;text-transform:uppercase;color:var(--muted)}
+.fact dt{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:12px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
 .fact dd{font-weight:750;line-height:1.35}
-/* ---------- detail sections ---------- */
-.detail-section{padding-top:clamp(44px,6vw,74px);padding-bottom:clamp(44px,6vw,74px);border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
-.section-body{max-width:900px;min-width:0}
-.section-body h2{font-size:clamp(1.8rem,4vw,2.9rem);line-height:1.08;letter-spacing:-0.035em;font-weight:820;margin-bottom:18px;text-wrap:balance}
-.section-body p{color:var(--muted);font-size:1.03rem;max-width:62ch}
-.section-body p + p{margin-top:14px}
-/* ---------- features ---------- */
-.feature-list{list-style:none;display:grid;gap:0;margin-top:22px}
-.feature-list li{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-top:1px solid var(--line);font-weight:700;line-height:1.45}
-.feature-list li::before{content:"";flex:0 0 auto;width:8px;height:8px;margin-top:9px;border-radius:50%;background:var(--page-accent-deep)}
-/* ---------- flow ---------- */
-.flow{list-style:none;display:grid;gap:26px;margin-top:10px}
-.flow-step{
-  position:relative;
-  display:grid;
-  gap:8px;
-  padding:24px;
-  border:1px solid var(--line);
-  border-radius:24px;
-  background:var(--white);
+/* ================= detail sections ================= */
+.detail-section{padding-top:clamp(44px,6vw,72px);padding-bottom:clamp(44px,6vw,72px);border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+.section-body{max-width:980px;min-width:0}
+.section-body > h2{font-size:clamp(1.8rem,3.6vw,2.7rem);line-height:1.1;letter-spacing:-.03em;font-weight:820;margin-bottom:18px;text-wrap:balance}
+html[lang="zh-Hant"] .section-body > h2{letter-spacing:0;line-height:1.22}
+.section-body > p{color:var(--muted);font-size:1.03rem;max-width:62ch}
+.section-body > p + p{margin-top:14px}
+/* ================= 2) the craft (design intent) ================= */
+.craft-list{display:grid;gap:clamp(36px,5vw,64px);margin-top:34px}
+.craft-item{display:grid;gap:22px;align-items:center}
+.craft-visual{border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#faf6ef;box-shadow:0 14px 34px rgba(28,27,25,.08)}
+.craft-visual .cv-img{aspect-ratio:4/3.2;overflow:hidden}
+.craft-visual .cv-img svg{display:block;width:100%;height:100%}
+.craft-visual figcaption{
+  padding:10px 14px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
 }
-.flow-num{
-  font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
-  font-size:13px;
-  font-weight:800;
-  letter-spacing:0.14em;
-  color:var(--page-accent-deep);
+.craft-copy{display:grid;gap:10px;align-content:start}
+.craft-copy .step{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--page-deep)}
+.craft-copy h3{font-size:clamp(1.3rem,2.2vw,1.7rem);letter-spacing:-.02em;font-weight:800;line-height:1.2}
+html[lang="zh-Hant"] .craft-copy h3{letter-spacing:0}
+.craft-copy p{color:var(--muted);max-width:46ch}
+@media (min-width:860px){
+  .craft-item{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px}
+  .craft-item:nth-child(even) .craft-visual{order:2}
 }
-.flow-step h3{font-size:1.25rem;letter-spacing:-0.015em;font-weight:800}
-.flow-step p{font-size:0.95rem}
+/* ================= features ================= */
+.feature-list{list-style:none;display:grid;gap:0;margin-top:24px}
+.feature-list li{display:flex;gap:14px;align-items:flex-start;padding:15px 0;border-top:1px solid var(--line);font-weight:700;line-height:1.45}
+.feature-list li::before{content:"";flex:0 0 auto;width:8px;height:8px;margin-top:9px;border-radius:50%;background:var(--page-deep)}
+@media (min-width:760px){.feature-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}}
+/* ================= 3-step flow (kept from v2) ================= */
+.flow{list-style:none;display:grid;gap:26px;margin-top:26px}
+.flow-step{position:relative;display:grid;gap:8px;padding:24px;border:1px solid var(--line);border-radius:22px;background:var(--white)}
+.flow-num{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--page-deep)}
+.flow-step h3{font-size:1.22rem;letter-spacing:-.015em;font-weight:800}
+.flow-step p{font-size:.95rem;color:var(--muted)}
 @media (min-width:760px){
   .flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:34px}
-  .flow-step:not(:last-child)::after{
-    content:"";
-    position:absolute;
-    top:50%;
-    right:-24px;
-    width:12px;
-    height:12px;
-    border-top:2.5px solid var(--page-accent-deep);
-    border-right:2.5px solid var(--page-accent-deep);
-    transform:translateY(-50%) rotate(45deg);
-  }
+  .flow-step:not(:last-child)::after{content:"";position:absolute;top:50%;right:-24px;width:12px;height:12px;border-top:2.5px solid var(--page-deep);border-right:2.5px solid var(--page-deep);transform:translateY(-50%) rotate(45deg)}
 }
 @media (max-width:759px){
-  .flow-step:not(:last-child)::after{
-    content:"";
-    position:absolute;
-    left:50%;
-    bottom:-20px;
-    width:12px;
-    height:12px;
-    border-bottom:2.5px solid var(--page-accent-deep);
-    border-right:2.5px solid var(--page-accent-deep);
-    transform:translateX(-50%) rotate(45deg);
-  }
+  .flow-step:not(:last-child)::after{content:"";position:absolute;left:50%;bottom:-20px;width:12px;height:12px;border-bottom:2.5px solid var(--page-deep);border-right:2.5px solid var(--page-deep);transform:translateX(-50%) rotate(45deg)}
 }
-/* ---------- gallery ---------- */
+/* ================= 3) design preview gallery ================= */
 .gallery{
-  display:grid;
-  grid-auto-flow:column;
-  grid-auto-columns:min(62vw,280px);
-  gap:26px;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  padding:14px 6px 30px;
-  scrollbar-width:thin;
-  scrollbar-color:var(--muted) transparent;
+  display:grid;grid-auto-flow:column;grid-auto-columns:min(62vw,280px);gap:26px;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 6px 30px;
+  scrollbar-width:thin;scrollbar-color:var(--muted) transparent;margin-top:18px;
 }
 .shot{scroll-snap-align:start;display:grid;gap:14px;align-content:start}
 .shot figcaption{display:grid;gap:2px}
-.shot figcaption strong{font-size:0.98rem;font-weight:780}
-.shot figcaption span{font-size:0.88rem;color:var(--muted)}
+.shot figcaption strong{font-size:.98rem;font-weight:780}
+.shot figcaption span{font-size:.88rem;color:var(--muted)}
 @media (min-width:1024px){
   .gallery{grid-auto-flow:initial;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible;grid-auto-columns:auto}
 }
 .preview-note{
-  margin-top:4px;
-  padding:12px 16px;
-  border:1px dashed oklch(0.70 0.018 80);
-  border-radius:16px;
-  font-size:0.92rem;
-  color:var(--muted);
-  max-width:62ch;
+  margin-top:4px;padding:12px 16px;border:1px dashed rgba(111,98,80,.45);border-radius:16px;
+  font-size:.92rem;color:var(--muted);max-width:62ch;
 }
-/* ---------- download ---------- */
-.download-panel{
-  display:grid;
-  gap:22px;
-  padding:clamp(24px,4vw,36px);
-  border:1px solid var(--line);
-  border-radius:32px;
-  background:var(--sand-soft);
+/* ================= availability ================= */
+.download-panel{display:grid;gap:14px;padding:clamp(24px,4vw,36px);border:1px solid var(--line);border-radius:26px;background:var(--page-tint)}
+.download-panel h2{font-size:clamp(1.4rem,2.6vw,1.9rem);letter-spacing:-.02em;font-weight:820}
+.download-panel strong{font-size:1.15rem;letter-spacing:-.01em;color:var(--sand-deep)}
+.download-panel p{color:var(--muted);max-width:56ch}
+/* ================= 4) next app ================= */
+.next-card{
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:clamp(26px,4vw,44px);border-radius:26px;border:1px solid transparent;
+  transition:border-color .3s var(--ease),transform .3s var(--ease);
 }
-.status-box{display:grid;gap:8px;max-width:56ch}
-.status-box strong{font-size:1.25rem;letter-spacing:-0.02em}
-.status-box p{color:var(--muted)}
-.back-row{padding-top:12px;padding-bottom:24px}
-.text-link{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  color:var(--ink);
-  font-weight:800;
-  letter-spacing:-0.01em;
+.next-card:hover{border-color:rgba(45,74,62,.35);transform:translateY(-3px)}
+.next-card.ziwei{background:var(--tint-ziwei)}
+.next-copy{display:grid;gap:6px;flex:1 1 240px}
+.next-copy .kicker{color:var(--muted)}
+.next-copy h3{font-size:clamp(1.5rem,2.8vw,2.1rem);letter-spacing:-.025em;font-weight:830;line-height:1.1}
+.next-copy p{color:var(--muted);max-width:44ch}
+.next-arrow{
+  flex:0 0 auto;width:58px;height:58px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1.5px solid rgba(28,27,25,.3);font-size:22px;font-weight:700;
+  transition:background-color .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease);
 }
-.text-link span{transition:transform 160ms var(--ease)}
-.text-link:hover span{transform:translateX(4px)}
-/* ---------- footer ---------- */
-.site-footer{margin-top:36px;border-top:1px solid var(--line);background:oklch(0.95 0.005 90 / 0.58)}
+.next-card:hover .next-arrow{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+/* ================= footer ================= */
+.site-footer{margin-top:24px;border-top:1px solid var(--line);background:rgba(239,236,230,.55)}
 .footer-inner{padding-top:42px;padding-bottom:30px;display:grid;gap:26px}
-.footer-brand{font-size:1.05rem;font-weight:750;letter-spacing:0.05em}
-.footer-tag{margin-top:6px;color:var(--muted);font-size:0.95rem}
+.footer-brand{font-size:1.05rem;font-weight:750;letter-spacing:.05em}
+.footer-tag{margin-top:6px;color:var(--muted);font-size:.95rem}
 .footer-nav{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center}
-.footer-nav a{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  color:var(--muted);
-  font-size:0.95rem;
-  font-weight:700;
-  transition:color 160ms var(--ease);
-}
+.footer-nav a{min-height:44px;display:inline-flex;align-items:center;color:var(--muted);font-size:.95rem;font-weight:700;transition:color .16s var(--ease)}
 .footer-nav a:hover{color:var(--ink)}
-.copyright{color:var(--muted);font-size:0.88rem}
-@media (min-width:520px){
-  .header-inner{border-radius:999px}
-}
-@media (min-width:760px){
-  .footer-inner{grid-template-columns:1fr auto;align-items:start}
-  .copyright{grid-column:1/-1}
-  .feature-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
-}
+.copyright{color:var(--muted);font-size:.88rem}
+@media (min-width:760px){.footer-inner{grid-template-columns:1fr auto;align-items:start}.copyright{grid-column:1/-1}}
 @media (min-width:900px){
-  .page-hero{grid-template-columns:minmax(0,1fr) 320px;column-gap:56px;align-items:center}
+  .page-hero{grid-template-columns:minmax(0,1fr) 300px;column-gap:56px;align-items:center}
   .hero-facts{grid-column:1/-1}
-  .detail-section{grid-template-columns:230px minmax(0,1fr);gap:56px}
+  .detail-section{grid-template-columns:200px minmax(0,1fr);gap:56px}
 }
-@media (max-width:420px){
-  .site-header{top:8px;padding:8px 8px 0}
-  .header-inner{padding:5px;gap:4px;justify-content:center}
-  .brand{padding-left:10px;padding-right:10px;font-size:15px}
-  .header-right{justify-content:center}
-  .site-nav a{padding-left:9px;padding-right:9px;font-size:13px}
-  .hero,.page-hero,.section,.detail-section,.footer-inner{padding-left:16px;padding-right:16px}
+@media (max-width:600px){
+  .site-nav > a{display:none} /* mobile: brand + Apps dropdown + lang switch only */
+  .nav-apps{position:static}
+  .apps-menu{position:absolute;left:16px;right:16px;top:calc(100% + 8px);min-width:0}
+  .site-header{position:sticky}
+}
+@media (max-width:520px){
+  .header-inner{padding:0 14px}
+  .brand{font-size:15px}
+  .site-nav > a,.nav-apps > button{padding:8px 8px;font-size:13px}
+  .page-hero,.section,.detail-section,.footer-inner{padding-left:16px;padding-right:16px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -377,26 +258,47 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
     <a class="brand" href="index.html" aria-label="lwbro studio home">lwbro studio</a>
     <div class="header-right">
       <nav class="site-nav" aria-label="Primary navigation">
-        <a href="index.html#apps" data-en="Apps" data-zh-hant="Apps">Apps</a>
+        <div class="nav-apps">
+          <button type="button" aria-expanded="false" aria-controls="apps-menu" data-nav-apps>
+            <span data-en="Apps" data-zh-hant="Apps">Apps</span>
+            <svg class="chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="apps-menu" id="apps-menu" role="menu">
+            <a href="ziwei.html" role="menuitem">
+              <span class="m-name">Ziwei Bazi Trend</span>
+              <span class="m-status" data-en="Available · Free" data-zh-hant="已上架 · 免費">Available · Free</span>
+            </a>
+            <a href="glyco.html" role="menuitem">
+              <span class="m-name">Glyco Navigator</span>
+              <span class="m-status" data-en="Coming Soon" data-zh-hant="審核中">Coming Soon</span>
+            </a>
+            <a href="western.html" role="menuitem">
+              <span class="m-name" data-en="Name TBD — Western astrology" data-zh-hant="Name TBD — 西洋星盤">Name TBD — Western astrology</span>
+              <span class="m-status" data-en="In Development" data-zh-hant="開發中">In Development</span>
+            </a>
+          </div>
+        </div>
         <a href="index.html#studio" data-en="Studio" data-zh-hant="工作室">Studio</a>
         <a href="#contact" data-en="Contact" data-zh-hant="聯絡">Contact</a>
       </nav>
       <div class="lang-switch" role="group" aria-label="Language 語言">
         <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <span class="lang-sep" aria-hidden="true">|</span>
         <button type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
       </div>
     </div>
   </div>
 </header>
 <main>
+  <!-- ============ 1) Header overview + status ============ -->
   <section class="page-hero" aria-labelledby="app-title">
     <div>
-      <a class="back-link" href="index.html"><span aria-hidden="true">←</span> <span data-en="Back to lwbro studio" data-zh-hant="回到 lwbro studio">Back to lwbro studio</span></a>
       <div class="title-stack">
         <span class="status development" data-en="In Development" data-zh-hant="開發中">In Development</span>
         <h1 class="page-title" id="app-title">Name TBD</h1>
         <p class="page-lede" data-en="Your Stars. Your Story. Your Trail." data-zh-hant="你的星，你的故事，你的軌跡。">Your Stars. Your Story. Your Trail.</p>
+        <div class="cta-row">
+          <span class="status-note" data-en="In development — the App Store link will be added after release." data-zh-hant="開發中 — App Store 連結將於上架後提供。">In development — the App Store link will be added after release.</span>
+        </div>
       </div>
     </div>
     <div class="ph-visual">
@@ -412,8 +314,6 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
               <line x1="205" y1="1300" x2="1085" y2="1300"/>
               <line x1="267" y1="922" x2="1023" y2="1678"/>
               <line x1="267" y1="1678" x2="1023" y2="922"/>
-              <line x1="423" y1="915" x2="867" y2="1685" opacity="0"/>
-              <line x1="430" y1="922" x2="860" y2="1678" opacity="0"/>
             </g>
             <g stroke="#d8ccb8" stroke-width="1.5">
               <line x1="645" y1="860" x2="645" y2="912"/>
@@ -460,15 +360,112 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
     </dl>
   </section>
 
-  <section class="detail-section" aria-labelledby="overview-title">
-    <div class="section-side"><p class="section-label" data-en="Overview" data-zh-hant="概覽">Overview</p></div>
-    <div class="section-body">
-      <h2 id="overview-title" data-en="A personal Western astrology journal." data-zh-hant="個人的西洋星盤紀錄。">A personal Western astrology journal.</h2>
-      <p data-en="Name TBD is a personal Western astrology record and analysis app, designed to help you see the trail of your own chart over time. It brings your natal chart, planetary positions, daily transits, and mood-energy notes into one quiet place." data-zh-hant="Name TBD 是一款個人的西洋星盤紀錄與分析 App，幫助你在時間中看見自己星盤的軌跡。它將本命星盤、行星位置、每日行運與心情精力紀錄，放在同一個安靜的地方。">Name TBD is a personal Western astrology record and analysis app, designed to help you see the trail of your own chart over time. It brings your natal chart, planetary positions, daily transits, and mood-energy notes into one quiet place.</p>
-      <p data-en="The first version is being shaped for a global English-speaking audience." data-zh-hant="第一版以全球英文使用者為對象設計。">The first version is being shaped for a global English-speaking audience.</p>
+  <!-- ============ 2) The craft (design intent, previews) ============ -->
+  <section class="detail-section" aria-labelledby="craft-title">
+    <div class="section-side"><p class="section-label" data-en="The craft" data-zh-hant="設計巧思">The craft</p></div>
+    <div class="section-body prose">
+      <h2 id="craft-title" data-en="How it’s being designed." data-zh-hant="它正在如何被設計。">How it’s being designed.</h2>
+      <p data-en="Name TBD is a personal Western astrology record and analysis app, designed to help you see the trail of your own chart over time. It brings your natal chart, planetary positions, daily transits, and mood-energy notes into one quiet place. The first version is being shaped for a global English-speaking audience." data-zh-hant="Name TBD 是一款個人的西洋星盤紀錄與分析 App，幫助你在時間中看見自己星盤的軌跡。它將本命星盤、行星位置、每日行運與心情精力紀錄，放在同一個安靜的地方。第一版以全球英文使用者為對象設計。">Name TBD is a personal Western astrology record and analysis app, designed to help you see the trail of your own chart over time. It brings your natal chart, planetary positions, daily transits, and mood-energy notes into one quiet place. The first version is being shaped for a global English-speaking audience.</p>
+
+      <div class="craft-list">
+        <div class="craft-item">
+          <figure class="craft-visual">
+            <div class="cv-img">
+              <svg viewBox="0 0 500 400" role="img" aria-label="Natal chart wheel — design preview">
+                <circle cx="250" cy="200" r="128" fill="none" stroke="#b3a08b" stroke-width="3.5"/>
+                <circle cx="250" cy="200" r="96" fill="none" stroke="#c9bba6" stroke-width="2"/>
+                <g stroke="#c9bba6" stroke-width="2">
+                  <line x1="250" y1="72" x2="250" y2="328"/><line x1="122" y1="200" x2="378" y2="200"/>
+                  <line x1="160" y1="110" x2="340" y2="290"/><line x1="160" y1="290" x2="340" y2="110"/>
+                </g>
+                <g font-family="ui-monospace,Menlo,monospace" font-size="17" fill="#8a7a63" text-anchor="middle">
+                  <text x="250" y="98">AS</text><text x="250" y="316">DS</text>
+                  <text x="140" y="205">MC</text><text x="360" y="205">IC</text>
+                </g>
+                <g fill="#a5947c"><circle cx="250" cy="106" r="7"/><circle cx="328" cy="152" r="7"/><circle cx="180" cy="244" r="7"/><circle cx="300" cy="264" r="7"/></g>
+              </svg>
+            </div>
+            <figcaption><span data-en="NATAL CHART WHEEL" data-zh-hant="本命輪圖">NATAL CHART WHEEL</span><span data-en="Design preview" data-zh-hant="設計預覽">Design preview</span></figcaption>
+          </figure>
+          <div class="craft-copy">
+            <span class="step" data-en="DETAIL 01" data-zh-hant="細節 01">細節 01</span>
+            <h3 data-en="A wheel you can read at a glance." data-zh-hant="一眼就能讀的輪圖。">A wheel you can read at a glance.</h3>
+            <p data-en="Houses, angles, and planets on one calm wheel — warm paper tones instead of neon star charts." data-zh-hant="宮位、軸點與行星收在同一張安靜的輪圖裡——用溫暖的紙感色調，而不是霓虹星圖。">Houses, angles, and planets on one calm wheel — warm paper tones instead of neon star charts.</p>
+          </div>
+        </div>
+        <div class="craft-item">
+          <figure class="craft-visual">
+            <div class="cv-img">
+              <svg viewBox="0 0 500 400" role="img" aria-label="Planetary positions table — design preview">
+                <g font-family="ui-monospace,Menlo,monospace" font-size="13" fill="#8a7a63">
+                  <text x="60" y="86">PLANET</text><text x="250" y="86">SIGN</text><text x="380" y="86">DEG</text>
+                </g>
+                <g font-family="-apple-system,'Segoe UI',sans-serif" font-size="19" fill="#4a4437">
+                  <text x="60" y="132">Sun</text><text x="60" y="182">Moon</text><text x="60" y="232">Mercury</text><text x="60" y="282">Venus</text><text x="60" y="332">Mars</text>
+                </g>
+                <g font-family="-apple-system,'Segoe UI',sans-serif" font-size="19" fill="#6f6250">
+                  <text x="250" y="132">Leo</text><text x="250" y="182">Taurus</text><text x="250" y="232">Virgo</text><text x="250" y="282">Cancer</text><text x="250" y="332">Aries</text>
+                </g>
+                <g font-family="ui-monospace,Menlo,monospace" font-size="17" fill="#8a7a63">
+                  <text x="380" y="132">12°</text><text x="380" y="182">03°</text><text x="380" y="232">27°</text><text x="380" y="282">08°</text><text x="380" y="332">19°</text>
+                </g>
+                <g stroke="#d8ccb8" stroke-width="2">
+                  <line x1="48" y1="146" x2="452" y2="146"/><line x1="48" y1="196" x2="452" y2="196"/>
+                  <line x1="48" y1="246" x2="452" y2="246"/><line x1="48" y1="296" x2="452" y2="296"/>
+                </g>
+              </svg>
+            </div>
+            <figcaption><span data-en="PLANETARY POSITIONS" data-zh-hant="行星位置表">PLANETARY POSITIONS</span><span data-en="Design preview" data-zh-hant="設計預覽">Design preview</span></figcaption>
+          </figure>
+          <div class="craft-copy">
+            <span class="step" data-en="DETAIL 02" data-zh-hant="細節 02">細節 02</span>
+            <h3 data-en="Planet, sign, degree — one table." data-zh-hant="行星、星座、度數，一張表。">Planet, sign, degree — one table.</h3>
+            <p data-en="No esoteric clutter: the positions you actually look up, set in one clean table." data-zh-hant="不收多餘的裝飾：你真正會查的位置，用一張乾淨的表呈現。">No esoteric clutter: the positions you actually look up, set in one clean table.</p>
+          </div>
+        </div>
+        <div class="craft-item">
+          <figure class="craft-visual">
+            <div class="cv-img">
+              <svg viewBox="0 0 500 400" role="img" aria-label="Daily transit timeline — design preview">
+                <line x1="70" y1="200" x2="430" y2="200" stroke="#b3a08b" stroke-width="3.5"/>
+                <g fill="#a5947c">
+                  <circle cx="95" cy="200" r="8"/><circle cx="180" cy="200" r="8"/>
+                  <circle cx="250" cy="200" r="11" fill="#6f6250"/><circle cx="335" cy="200" r="8"/>
+                  <circle cx="410" cy="200" r="8"/>
+                </g>
+                <g font-family="ui-monospace,Menlo,monospace" font-size="14" fill="#8a7a63" text-anchor="middle">
+                  <text x="95" y="172">06:00</text><text x="180" y="172">09:00</text>
+                  <text x="250" y="172">12:00</text><text x="335" y="172">18:00</text>
+                  <text x="410" y="172">23:00</text>
+                </g>
+                <g font-family="-apple-system,'Segoe UI',sans-serif" font-size="15" fill="#6f6250" text-anchor="middle">
+                  <text x="95" y="232">Moon</text><text x="180" y="232">Mercury</text>
+                  <text x="250" y="236" font-weight="700">Sun</text><text x="335" y="232">Venus</text>
+                  <text x="410" y="232">Mars</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption><span data-en="DAILY TRANSITS" data-zh-hant="每日行運">DAILY TRANSITS</span><span data-en="Design preview" data-zh-hant="設計預覽">Design preview</span></figcaption>
+          </figure>
+          <div class="craft-copy">
+            <span class="step" data-en="DETAIL 03" data-zh-hant="細節 03">細節 03</span>
+            <h3 data-en="Today, along a timeline." data-zh-hant="今天，沿著時間線展開。">Today, along a timeline.</h3>
+            <p data-en="Daily transits laid along the hours of your day, next to a one-tap mood and energy note — record, then review the trend." data-zh-hant="每日行運沿著一天的時間展開，旁邊就能順手記下心情與精力——先記錄，再回顧趨勢。">Daily transits laid along the hours of your day, next to a one-tap mood and energy note — record, then review the trend.</p>
+          </div>
+        </div>
+      </div>
+
+      <ul class="feature-list" aria-label="Planned for v1">
+        <li data-en="Natal chart" data-zh-hant="本命星盤">Natal chart</li>
+        <li data-en="Planetary positions" data-zh-hant="行星位置">Planetary positions</li>
+        <li data-en="Daily transits" data-zh-hant="每日行運">Daily transits</li>
+        <li data-en="14-day transit preview" data-zh-hant="14 天行運預覽">14-day transit preview</li>
+        <li data-en="Mood &amp; energy tracking" data-zh-hant="心情與精力追蹤">Mood &amp; energy tracking</li>
+      </ul>
     </div>
   </section>
 
+  <!-- ============ How it works (kept from v2) ============ -->
   <section class="detail-section" aria-labelledby="flow-title">
     <div class="section-side"><p class="section-label" data-en="How it works" data-zh-hant="使用流程">How it works</p></div>
     <div class="section-body">
@@ -493,26 +490,13 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
     </div>
   </section>
 
-  <section class="detail-section" aria-labelledby="features-title">
-    <div class="section-side"><p class="section-label" data-en="Planned for v1" data-zh-hant="v1 規劃">Planned for v1</p></div>
-    <div class="section-body">
-      <h2 id="features-title" data-en="Core features" data-zh-hant="核心功能">Core features</h2>
-      <ul class="feature-list">
-        <li data-en="Natal chart" data-zh-hant="本命星盤">Natal chart</li>
-        <li data-en="Planetary positions" data-zh-hant="行星位置">Planetary positions</li>
-        <li data-en="Daily transits" data-zh-hant="每日行運">Daily transits</li>
-        <li data-en="14-day transit preview" data-zh-hant="14 天行運預覽">14-day transit preview</li>
-        <li data-en="Mood &amp; energy tracking" data-zh-hant="心情與精力追蹤">Mood &amp; energy tracking</li>
-      </ul>
-    </div>
-  </section>
-
+  <!-- ============ 3) Design preview gallery (kept from v2) ============ -->
   <section class="detail-section" aria-labelledby="previews-title">
     <div class="section-side"><p class="section-label" data-en="Design previews" data-zh-hant="設計預覽">Design previews</p></div>
     <div class="section-body" style="max-width:none">
       <h2 id="previews-title" data-en="What it will look like." data-zh-hant="它可能的樣子。">What it will look like.</h2>
       <p class="preview-note" data-en="This app is still in development. The visuals below are design previews drawn for this page — not screenshots of a finished app." data-zh-hant="這款 App 仍在開發中。以下是為本頁繪製的設計預覽，不是完成品的截圖。">This app is still in development. The visuals below are design previews drawn for this page — not screenshots of a finished app.</p>
-      <div class="gallery" tabindex="0" role="region" aria-label="Design previews" style="margin-top:18px">
+      <div class="gallery" tabindex="0" role="region" aria-label="Design previews">
         <figure class="shot">
           <div class="phone">
             <span class="island"></span>
@@ -655,20 +639,33 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
     </div>
   </section>
 
+  <!-- ============ Availability (status text, no fake link) ============ -->
   <section class="detail-section" aria-labelledby="download-title">
     <div class="section-side"><p class="section-label" data-en="Availability" data-zh-hant="上架狀態">Availability</p></div>
     <div class="download-panel">
-      <div class="status-box">
-        <h2 id="download-title" data-en="Currently in development" data-zh-hant="目前開發中">Currently in development</h2>
-        <strong data-en="In Development" data-zh-hant="開發中">In Development</strong>
-        <p data-en="The App Store link will be added after release." data-zh-hant="App Store 連結將於上架後提供。">The App Store link will be added after release.</p>
-      </div>
+      <h2 id="download-title" data-en="Currently in development" data-zh-hant="目前開發中">Currently in development</h2>
+      <strong data-en="In Development" data-zh-hant="開發中">In Development</strong>
+      <p data-en="The App Store link will be added after release." data-zh-hant="App Store 連結將於上架後提供。">The App Store link will be added after release.</p>
     </div>
   </section>
 
-  <div class="detail-section back-row">
-    <a class="text-link" href="index.html"><span aria-hidden="true">←</span> <span data-en="Back to lwbro studio" data-zh-hant="回到 lwbro studio">Back to lwbro studio</span></a>
-  </div>
+  <!-- ============ 4) Next app ============ -->
+  <section class="detail-section" aria-labelledby="next-title">
+    <div class="section-side"><p class="section-label" data-en="Next work" data-zh-hant="下一個作品">Next work</p></div>
+    <div class="section-body" style="max-width:none">
+      <a class="next-card ziwei" href="ziwei.html" aria-labelledby="next-title">
+        <span class="app-icon ziwei" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 30 30"><g fill="#35704F"><rect x="2" y="2" width="7" height="7" rx="2"/><rect x="11.5" y="2" width="7" height="7" rx="2" opacity=".55"/><rect x="21" y="2" width="7" height="7" rx="2" opacity=".3"/><rect x="2" y="11.5" width="7" height="7" rx="2" opacity=".55"/><rect x="11.5" y="11.5" width="7" height="7" rx="2"/><rect x="21" y="11.5" width="7" height="7" rx="2" opacity=".55"/><rect x="2" y="21" width="7" height="7" rx="2" opacity=".3"/><rect x="11.5" y="21" width="7" height="7" rx="2" opacity=".55"/><rect x="21" y="21" width="7" height="7" rx="2"/></g></svg>
+        </span>
+        <span class="next-copy">
+          <span class="kicker" id="next-title" data-en="Next work" data-zh-hant="下一個作品">Next work</span>
+          <h3>Ziwei Bazi Trend</h3>
+          <p data-en="Your Ziwei chart, daily flow, and how you actually felt — kept together, so you can see your own rhythm over time." data-zh-hant="把紫微命盤、每日流運與心情精力放在一起，讓你看見自己一段時間的節奏。">Your Ziwei chart, daily flow, and how you actually felt — kept together, so you can see your own rhythm over time.</p>
+        </span>
+        <span class="next-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
 </main>
 <footer class="site-footer" id="contact">
   <div class="footer-inner">
@@ -716,6 +713,23 @@ html[lang="zh-Hant"] .page-title{letter-spacing:-0.02em;line-height:1.02}
   var saved=null;
   try{saved=localStorage.getItem(KEY);}catch(e){}
   apply((saved==='zh-Hant'||saved==='en')?saved:DEFAULT);
+
+  var navBtn=document.querySelector('[data-nav-apps]');
+  var menu=document.getElementById('apps-menu');
+  if(navBtn&&menu){
+    function closeMenu(){menu.classList.remove('open');navBtn.setAttribute('aria-expanded','false');}
+    navBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=menu.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded',String(open));
+    });
+    document.addEventListener('click',function(e){
+      if(!menu.contains(e.target)&&e.target!==navBtn){closeMenu();}
+    });
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){closeMenu();navBtn.focus();}
+    });
+  }
 })();
 </script>
 </body>

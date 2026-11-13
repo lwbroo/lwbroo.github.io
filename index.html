@@ -4,392 +4,322 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-en="lwbro studio — Personal apps, made carefully." data-zh-hant="lwbro studio — 個人 App，用心打造。">lwbro studio — Personal apps, made carefully.</title>
-<meta name="description" data-en="lwbro studio is an independent iOS studio making personal record and analysis apps." data-zh-hant="lwbro studio 是獨立 iOS 工作室，製作個人紀錄與分析 App。" content="lwbro studio is an independent iOS studio making personal record and analysis apps.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23fcfbfa'/%3E%3Ccircle cx='20' cy='32' r='7' fill='%23e7fec7'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ea4467'/%3E%3Ccircle cx='44' cy='32' r='7' fill='%23c6b3a2'/%3E%3C/svg%3E">
+<meta name="description" data-en="lwbro studio is an independent iOS studio crafting calm, focused tools for everyday life." data-zh-hant="lwbro studio 是專注打造安靜、順手、陪伴日常工具的獨立 iOS 工作室。" content="lwbro studio is an independent iOS studio crafting calm, focused tools for everyday life.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FAF8F5'/%3E%3Ccircle cx='20' cy='32' r='7' fill='%237FB08A'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23C0563F'/%3E%3Ccircle cx='44' cy='32' r='7' fill='%23B3A08B'/%3E%3C/svg%3E">
 <style>
+/* ================= v3 design tokens (shared across all 4 pages) ================= */
 :root{
-  --paper: oklch(0.985 0.003 95);
-  --white: oklch(0.995 0.002 95);
-  --ink: oklch(0.22 0.006 90);
-  --charcoal: oklch(0.25 0.010 70);
-  --muted: oklch(0.43 0.012 80);
-  --surface: oklch(0.95 0.005 90);
-  --surface-strong: oklch(0.92 0.008 85);
-  --line: oklch(0.89 0.008 85);
-  --mint: oklch(0.95 0.075 130);
-  --mint-deep: oklch(0.52 0.100 145);
-  --coral: oklch(0.61 0.210 20);
-  --coral-deep: oklch(0.50 0.180 20);
-  --coral-soft: oklch(0.96 0.020 20);
-  --sand: oklch(0.75 0.040 70);
-  --sand-soft: oklch(0.91 0.025 75);
-  --sand-deep: oklch(0.45 0.045 65);
-  --focus: oklch(0.52 0.180 20);
-  --shadow: 0 24px 60px oklch(0.25 0.010 70 / 0.09);
-  --phone-shadow: 0 36px 70px oklch(0.25 0.010 70 / 0.16), 0 3px 10px oklch(0.25 0.010 70 / 0.10), inset 0 0 0 1px oklch(1 0 0 / 0.14);
-  --max: 1180px;
-  --ease: cubic-bezier(0.23,1,0.32,1);
+  --paper:#FAF8F5;          /* 60% warm paper white */
+  --card:#EFECE6;           /* 30% warm grey-beige card */
+  --ink:#1C1B19;            /* deep charcoal, not pure black */
+  --muted:#5C5852;          /* warm dark grey, 6.6:1 on paper */
+  --accent:#2D4A3E;         /* deep forest green — the ONLY accent */
+  --white:#FDFCF9;
+  --line:#DED8CE;
+  --tint-ziwei:#E7EEE3;     /* misty sage, from Ziwei mint */
+  --tint-glyco:#F3E6DE;     /* misty apricot, from Glyco coral */
+  --tint-western:#EFE7D8;   /* warm sand, from Western beige */
+  --ziwei-deep:#35704F;
+  --coral-deep:#A84A38;
+  --sand-deep:#6F6250;
+  --focus:#2D4A3E;
+  --shadow:0 24px 60px rgba(28,27,25,.09);
+  --phone-shadow:0 36px 70px rgba(28,27,25,.16),0 3px 10px rgba(28,27,25,.10),inset 0 0 0 1px rgba(255,255,255,.14);
+  --max:1180px;
+  --ease:cubic-bezier(.22,1,.36,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:96px}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{
   min-height:100dvh;
   color:var(--ink);
   background:var(--paper);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI","PingFang TC","PingFang SC","Microsoft JhengHei","Microsoft YaHei",sans-serif;
   font-size:16px;
-  line-height:1.65;
+  line-height:1.5;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
+/* zh-Hant: CJK glyphs are denser — loosen leading & paragraph gaps */
+html[lang="zh-Hant"] body{line-height:1.72}
+html[lang="zh-Hant"] .prose p + p{margin-top:20px}
+html[lang="zh-Hant"] .hero-sub{letter-spacing:.01em}
 body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(circle at 84% 8%, oklch(0.95 0.075 130 / 0.55) 0, transparent 24rem),
-    radial-gradient(circle at 4% 42%, oklch(0.75 0.040 70 / 0.20) 0, transparent 22rem);
+    radial-gradient(circle at 88% 4%, rgba(231,238,227,.85) 0, transparent 26rem),
+    radial-gradient(circle at 0% 46%, rgba(239,231,216,.55) 0, transparent 24rem);
 }
-::selection{background:var(--mint);color:var(--ink)}
+::selection{background:var(--tint-ziwei);color:var(--ink)}
 a{color:inherit;text-decoration:none}
 p,li,dd,a,h1,h2,h3{overflow-wrap:break-word}
 a,button{-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-:focus-visible{outline:3px solid var(--focus);outline-offset:4px;border-radius:12px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:10px}
 .site-header,.site-footer,main{position:relative;z-index:1}
-/* ---------- header ---------- */
-.site-header{position:sticky;top:12px;z-index:10;padding:12px 12px 0}
+/* ================= sticky header — 64px, blurred warm white ================= */
+.site-header{
+  position:sticky;top:0;z-index:20;height:64px;
+  display:flex;align-items:center;
+  background:rgba(250,248,245,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(28,27,25,.07);
+}
 .header-inner{
-  width:min(var(--max),100%);
-  margin:0 auto;
-  padding:6px;
-  border:1px solid oklch(0.89 0.008 85 / 0.82);
-  border-radius:30px;
-  background:oklch(0.995 0.002 95 / 0.88);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  flex-wrap:wrap;
+  width:min(var(--max),100%);height:64px;margin:0 auto;padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
 }
 .brand{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  padding:10px 16px;
-  border-radius:999px;
-  font-size:16px;
-  font-weight:700;
-  letter-spacing:0.055em;
-  white-space:nowrap;
-  transition:background-color 160ms var(--ease);
+  min-height:44px;display:inline-flex;align-items:center;
+  font-size:16px;font-weight:700;letter-spacing:.055em;white-space:nowrap;
+  border-radius:10px;padding:6px 2px;
+  transition:color .2s var(--ease);
 }
-.brand:hover{background:var(--surface)}
-.header-right{display:flex;align-items:center;gap:2px;flex-wrap:wrap;justify-content:flex-end}
-.site-nav{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
-.site-nav a{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:10px 13px;
-  border-radius:999px;
-  color:var(--muted);
-  font-size:14px;
-  font-weight:700;
-  transition:background-color 160ms var(--ease),color 160ms var(--ease);
+.brand:hover{color:var(--accent)}
+.header-right{display:flex;align-items:center;gap:4px}
+.site-nav{display:flex;align-items:center;gap:2px}
+.site-nav > a,.nav-apps > button{
+  min-height:44px;display:inline-flex;align-items:center;gap:5px;
+  padding:8px 12px;border-radius:10px;
+  color:var(--muted);font-size:14px;font-weight:700;
+  transition:color .2s var(--ease),background-color .2s var(--ease);
 }
-.site-nav a:hover{background:var(--surface);color:var(--ink)}
+.site-nav > a:hover,.nav-apps > button:hover{color:var(--ink);background:rgba(28,27,25,.05)}
+.nav-apps{position:relative}
+.nav-apps .chev{width:10px;height:10px;transition:transform .2s var(--ease)}
+.nav-apps > button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.apps-menu{
+  position:absolute;top:calc(100% + 8px);right:0;min-width:264px;
+  display:none;gap:2px;padding:6px;
+  background:var(--white);border:1px solid var(--line);border-radius:16px;
+  box-shadow:0 18px 44px rgba(28,27,25,.13);
+}
+.apps-menu.open{display:grid}
+.apps-menu a{
+  display:grid;gap:2px;padding:11px 12px;border-radius:11px;
+  transition:background-color .16s var(--ease);
+}
+.apps-menu a:hover{background:var(--card)}
+.apps-menu .m-name{font-weight:750;font-size:14.5px;letter-spacing:-.01em}
+.apps-menu .m-status{font-size:12px;color:var(--muted);font-weight:600}
 .lang-switch{
-  display:inline-flex;
-  align-items:center;
-  gap:1px;
-  margin-left:6px;
-  padding:3px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:var(--white);
+  display:inline-flex;align-items:center;gap:1px;margin-left:8px;padding:3px;
+  border:1px solid var(--line);border-radius:999px;background:var(--white);
 }
 .lang-switch button{
-  min-height:38px;
-  min-width:44px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:6px 11px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:0.02em;
-  color:var(--muted);
-  transition:background-color 160ms var(--ease),color 160ms var(--ease);
+  min-height:36px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;
+  padding:5px 11px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.02em;
+  color:var(--muted);transition:background-color .2s var(--ease),color .2s var(--ease);
 }
 .lang-switch button:hover{color:var(--ink)}
-.lang-switch button[aria-pressed="true"]{background:var(--charcoal);color:var(--paper)}
-.lang-sep{display:none}
-/* ---------- shared layout ---------- */
-.hero,.page-hero,.section,.detail-section,.footer-inner{width:min(var(--max),100%);margin:0 auto;padding-left:20px;padding-right:20px}
-.kicker,.section-label,.meta-label{
+.lang-switch button[aria-pressed="true"]{background:var(--accent);color:var(--paper)} /* accent use #2: active lang */
+/* ================= shared layout ================= */
+.hero,.section,.footer-inner{width:min(var(--max),100%);margin:0 auto;padding-left:20px;padding-right:20px}
+.kicker,.section-label{
   font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:var(--muted);
+  font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
 }
 .status{
-  min-height:32px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  line-height:1.2;
-  font-weight:800;
-  white-space:nowrap;
+  min-height:30px;display:inline-flex;align-items:center;gap:8px;
+  padding:5px 12px;border-radius:999px;font-size:12px;line-height:1.2;font-weight:800;white-space:nowrap;
 }
 .status::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.status.available{background:var(--mint);color:var(--ink)}
-.status.coming{background:var(--white);color:var(--coral-deep);border:1px solid oklch(0.61 0.210 20 / 0.36)}
-.status.development{background:var(--sand);color:var(--ink)}
-/* ---------- phone frame ---------- */
+.status.available{background:var(--tint-ziwei);color:var(--ziwei-deep)}
+.status.coming{background:var(--white);color:var(--coral-deep);border:1px solid rgba(168,74,56,.36)}
+.status.development{background:var(--tint-western);color:var(--sand-deep)}
+/* ================= phone frame ================= */
 .phone{
-  position:relative;
-  aspect-ratio:1290/2796;
+  position:relative;aspect-ratio:1290/2796;
   background:linear-gradient(160deg,#45484e,#141518);
-  border-radius:12% / 5.6%;
-  padding:2.4%;
-  box-shadow:var(--phone-shadow);
+  border-radius:12% / 5.6%;padding:2.4%;box-shadow:var(--phone-shadow);
 }
-.phone .screen{
-  position:relative;
-  width:100%;
-  height:100%;
-  border-radius:9.4% / 4.4%;
-  overflow:hidden;
-  background:var(--white);
-}
+.phone .screen{position:relative;width:100%;height:100%;border-radius:9.4% / 4.4%;overflow:hidden;background:var(--white)}
 .phone .screen img{width:100%;height:100%;object-fit:cover;display:block}
+.phone .screen svg{display:block;width:100%;height:100%}
 .phone .island{
-  position:absolute;
-  z-index:3;
-  top:3.3%;
-  left:50%;
-  transform:translateX(-50%);
-  width:27%;
-  height:2.55%;
-  background:#0c0d0f;
-  border-radius:999px;
-  pointer-events:none;
+  position:absolute;z-index:3;top:3.3%;left:50%;transform:translateX(-50%);
+  width:27%;height:2.55%;background:#0c0d0f;border-radius:999px;pointer-events:none;
 }
 .phone .preview-badge{
-  position:absolute;
-  z-index:4;
-  left:50%;
-  bottom:5%;
-  transform:translateX(-50%);
-  padding:5px 12px;
-  border-radius:999px;
-  background:oklch(0.25 0.010 70 / 0.82);
-  color:var(--paper);
-  font-size:clamp(9px,1.1vw,12px);
-  font-weight:700;
-  letter-spacing:0.04em;
-  white-space:nowrap;
-  pointer-events:none;
+  position:absolute;z-index:4;left:50%;bottom:5%;transform:translateX(-50%);
+  padding:5px 12px;border-radius:999px;background:rgba(28,27,25,.82);color:var(--paper);
+  font-size:clamp(9px,1.1vw,12px);font-weight:700;letter-spacing:.04em;white-space:nowrap;pointer-events:none;
 }
-/* ---------- hero ---------- */
-.hero{padding-top:clamp(64px,9vw,120px);padding-bottom:clamp(40px,5vw,72px);display:grid;gap:clamp(36px,5vw,60px)}
+/* ================= app icon marks ================= */
+.app-icon{
+  width:56px;height:56px;border-radius:15px;flex:0 0 auto;
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid rgba(28,27,25,.08);
+}
+.app-icon svg{display:block}
+.app-icon.ziwei{background:var(--tint-ziwei)}
+.app-icon.glyco{background:var(--tint-glyco)}
+.app-icon.western{background:var(--tint-western)}
+/* ================= hero ================= */
+.hero{padding-top:clamp(72px,10vw,128px);padding-bottom:clamp(56px,7vw,96px)}
 .hero h1{
-  margin-top:20px;
-  font-size:clamp(3rem,7.6vw,6.4rem);
-  line-height:0.94;
-  letter-spacing:-0.058em;
-  font-weight:850;
-  text-wrap:balance;
+  margin-top:22px;
+  font-size:clamp(2.6rem,4.6vw,4rem);   /* 48–64px on desktop */
+  line-height:1.04;letter-spacing:-.02em;font-weight:830;text-wrap:balance;
 }
-html[lang="zh-Hant"] .hero h1{letter-spacing:-0.01em;line-height:1.04}
 .hero h1 .line{display:block}
-.hero-lede{
-  margin-top:26px;
-  max-width:34ch;
-  font-size:clamp(1.15rem,2vw,1.45rem);
-  line-height:1.4;
-  font-weight:600;
-  letter-spacing:-0.015em;
-  color:var(--muted);
+html[lang="zh-Hant"] .hero h1{letter-spacing:0;line-height:1.12}
+.hero-sub{
+  margin-top:22px;max-width:44ch;
+  font-size:clamp(1.05rem,1.6vw,1.25rem);line-height:1.5;font-weight:600;
+  letter-spacing:-.008em;color:var(--muted);
 }
-.hero-visual{
-  position:relative;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  padding:0 2%;
+html[lang="zh-Hant"] .hero-sub{line-height:1.75}
+.hero-meta{
+  margin-top:30px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
 }
-.hv-phone{flex:0 0 33%;position:relative}
-.hv-phone.hv-main{flex-basis:38%;z-index:2;margin:0 -5%}
-.hv-phone.hv-left{transform:translateY(7%)}
-.hv-phone.hv-right{transform:translateY(7%)}
-.hv-phone .phone{transition:transform 240ms var(--ease),box-shadow 240ms var(--ease)}
-.hv-phone:hover .phone{transform:translateY(-6px)}
-@media (prefers-reduced-motion:no-preference){
-  .hero-visual .hv-phone{animation:rise 700ms var(--ease) both}
-  .hero-visual .hv-main{animation-delay:120ms}
-  .hero-visual .hv-right{animation-delay:240ms}
-  @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1}}
-  .hero-visual .hv-left{animation-name:rise-l}
-  .hero-visual .hv-right{animation-name:rise-r}
-  @keyframes rise-l{from{opacity:0;transform:translateY(7%) translateY(26px)}to{opacity:1;transform:translateY(7%)}}
-  @keyframes rise-r{from{opacity:0;transform:translateY(7%) translateY(26px)}to{opacity:1;transform:translateY(7%)}}
-}
-/* ---------- sections ---------- */
-.section{padding-top:clamp(52px,7vw,92px);padding-bottom:clamp(52px,7vw,92px)}
-.section-header{display:grid;gap:16px;margin-bottom:clamp(28px,4vw,44px)}
+.hero-meta .dotset{display:inline-flex;gap:6px}
+.hero-meta .dotset i{width:8px;height:8px;border-radius:50%}
+/* ================= showcase cards ================= */
+.section{padding-top:clamp(48px,6vw,84px);padding-bottom:clamp(48px,6vw,84px)}
+.section-header{display:grid;gap:14px;margin-bottom:clamp(30px,4vw,46px)}
 .section-title{
-  max-width:14ch;
-  font-size:clamp(2.4rem,6.4vw,4.9rem);
-  line-height:0.98;
-  letter-spacing:-0.05em;
-  font-weight:830;
-  text-wrap:balance;
+  max-width:16ch;font-size:clamp(2.1rem,4.6vw,3.4rem);line-height:1.04;
+  letter-spacing:-.035em;font-weight:830;text-wrap:balance;
 }
-html[lang="zh-Hant"] .section-title{letter-spacing:-0.005em;line-height:1.08}
+html[lang="zh-Hant"] .section-title{letter-spacing:0;line-height:1.16}
 .section-intro{max-width:62ch;color:var(--muted);font-size:1.02rem}
-/* ---------- work wall ---------- */
-.work-featured{
-  position:relative;
-  display:grid;
-  gap:28px;
-  padding:clamp(26px,4vw,48px);
-  border:1px solid var(--line);
-  border-radius:36px;
-  background:linear-gradient(140deg,var(--mint),var(--white) 78%);
-  overflow:hidden;
-  transition:transform 200ms var(--ease),box-shadow 200ms var(--ease),border-color 200ms var(--ease);
+.showcase{display:grid;gap:24px}
+.app-card{
+  position:relative;display:grid;gap:28px;overflow:hidden;
+  padding:clamp(26px,3.6vw,48px);padding-bottom:0;
+  border-radius:28px;border:1px solid transparent;
+  background:var(--card);
+  transition:border-color .3s var(--ease),box-shadow .3s var(--ease);
 }
-.work-featured:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:oklch(0.80 0.012 80)}
-.work-card{
-  position:relative;
-  display:grid;
-  gap:26px;
-  padding:clamp(26px,4vw,40px);
-  border:1px solid var(--line);
-  border-radius:32px;
-  background:var(--white);
-  overflow:hidden;
-  transition:transform 200ms var(--ease),box-shadow 200ms var(--ease),border-color 200ms var(--ease);
+.app-card.ziwei{background:var(--tint-ziwei)}
+.app-card.glyco{background:var(--tint-glyco)}
+.app-card.western{background:var(--tint-western)}
+.app-card:hover{border-color:rgba(45,74,62,.35);box-shadow:var(--shadow)} /* accent use #3: hairline hover border */
+.card-info{display:grid;gap:16px;align-content:start;justify-items:start;padding-bottom:clamp(26px,3.6vw,48px)}
+.card-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.card-name{font-size:clamp(1.6rem,2.6vw,2.15rem);line-height:1.06;letter-spacing:-.03em;font-weight:820}
+.card-sub{color:var(--muted);font-weight:700;font-size:.98rem}
+.card-value{max-width:40ch;font-size:1.06rem;line-height:1.55;color:var(--ink)}
+html[lang="zh-Hant"] .card-value{line-height:1.75}
+.pills{display:flex;gap:8px;flex-wrap:wrap;list-style:none}
+.pills li{
+  padding:5px 12px;border-radius:999px;border:1px solid rgba(28,27,25,.14);
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--muted);white-space:nowrap;
 }
-.work-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:oklch(0.80 0.012 80)}
-.work-card.glyco{background:linear-gradient(160deg,var(--coral-soft),var(--white) 80%)}
-.work-card.western{background:linear-gradient(160deg,var(--sand-soft),var(--white) 85%)}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.card-meta{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;padding-top:8px}
-.work-featured h3{font-size:clamp(2rem,4.4vw,3.2rem);line-height:1.0;letter-spacing:-0.045em;font-weight:830}
-.work-card h3{font-size:clamp(1.7rem,3.4vw,2.4rem);line-height:1.02;letter-spacing:-0.04em;font-weight:820}
-.zh-name{margin-top:8px;color:var(--muted);font-weight:700}
-.card-desc{max-width:38ch;color:var(--muted)}
 .mini-flow{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;list-style:none}
 .mini-flow li{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:0.02em;
-  color:var(--ink);
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink);
 }
 .mini-flow li .n{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:22px;height:22px;
-  border-radius:50%;
-  border:1.5px solid currentColor;
-  font-size:11px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font-size:11px;
 }
-.mini-flow .mf-arrow{color:var(--muted);border:0;width:auto;height:auto}
-.card-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
-.card-link,.text-link{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  color:var(--ink);
-  font-weight:800;
-  letter-spacing:-0.01em;
+.mini-flow .mf-arrow{color:var(--muted)}
+.explore-link{
+  min-height:44px;display:inline-flex;align-items:center;gap:10px;
+  margin-top:2px;font-weight:800;letter-spacing:-.01em;font-size:1.05rem;color:var(--ink);
+  border-bottom:2px solid transparent;transition:color .2s var(--ease);
 }
-.card-link span,.text-link span{transition:transform 160ms var(--ease)}
-.card-link:hover span,.text-link:hover span{transform:translateX(4px)}
-.work-phones{display:flex;align-items:flex-end;justify-content:center}
-.work-phones .phone{flex:0 0 58%}
-.work-phones .phone + .phone{margin-left:-14%;transform:translateY(9%)}
-.work-phone-single{display:flex;justify-content:center}
-.work-phone-single .phone{flex:0 0 62%}
-/* ---------- studio ---------- */
+.explore-link .arr{transition:transform .2s var(--ease)}
+.explore-link:hover{color:var(--accent)}
+.explore-link:hover .arr{transform:translateX(5px)}
+/* visual stage: phone bleeds off the card bottom + one floating detail chip */
+.card-stage{position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:380px}
+.card-stage .phone{
+  width:min(300px,62%);
+  transform:translateY(0);
+  transition:transform .3s cubic-bezier(.22,1,.36,1);
+}
+.app-card:hover .card-stage .phone{transform:translateY(-4px)}
+.detail-chip{
+  position:absolute;right:2%;top:9%;width:46%;max-width:250px;
+  background:var(--white);border:1px solid var(--line);border-radius:18px;
+  padding:10px;box-shadow:0 18px 42px rgba(28,27,25,.14);
+  transform:translateY(0);transition:transform .3s cubic-bezier(.22,1,.36,1);
+}
+.app-card:hover .detail-chip{transform:translateY(-6px)}
+.detail-chip .chip-img{aspect-ratio:5/4;border-radius:11px;overflow:hidden;background:var(--card)}
+.detail-chip .chip-img img{width:100%;height:100%;object-fit:cover;display:block}
+.detail-chip .chip-cap{
+  display:block;padding:8px 4px 2px;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);
+}
+@media (min-width:900px){
+  .app-card{grid-template-columns:5fr 7fr;column-gap:clamp(24px,3vw,48px)}
+  .app-card.flip .card-info{order:2}
+  .app-card.flip .card-stage{order:1}
+  .app-card.flip .detail-chip{right:auto;left:2%}
+}
+@media (max-width:560px){
+  .card-stage{min-height:330px}
+  .detail-chip{width:52%;top:6%}
+}
+/* ================= studio ================= */
 .about-panel{
-  display:grid;
-  gap:30px;
-  padding:clamp(28px,5vw,56px);
-  border:1px solid var(--line);
-  border-radius:36px;
-  background:oklch(0.995 0.002 95 / 0.76);
+  display:grid;gap:30px;padding:clamp(28px,5vw,56px);
+  border:1px solid var(--line);border-radius:28px;background:var(--card);
 }
-.about-statement{font-size:clamp(1.9rem,4.6vw,3.8rem);line-height:1.04;letter-spacing:-0.048em;font-weight:830;max-width:12ch;text-wrap:balance}
-html[lang="zh-Hant"] .about-statement{letter-spacing:-0.005em}
+.about-statement{font-size:clamp(1.8rem,3.8vw,3rem);line-height:1.08;letter-spacing:-.03em;font-weight:830;max-width:14ch;text-wrap:balance}
+html[lang="zh-Hant"] .about-statement{letter-spacing:0}
 .about-copy{border-top:1px solid var(--line);padding-top:24px;display:grid;gap:18px;color:var(--muted);max-width:62ch}
 .about-copy strong{color:var(--ink)}
 .principles{list-style:none;display:grid;gap:0;margin-top:6px}
 .principles li{display:grid;gap:4px;padding:18px 0;border-top:1px solid var(--line)}
 .principles strong{font-size:1.02rem;font-weight:780}
-.principles p{color:var(--muted);font-size:0.96rem}
-/* ---------- footer ---------- */
-.site-footer{margin-top:36px;border-top:1px solid var(--line);background:oklch(0.95 0.005 90 / 0.58)}
+.principles p{color:var(--muted);font-size:.96rem}
+@media (min-width:760px){.principles{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:36px}}
+@media (min-width:900px){.about-panel{grid-template-columns:.9fr 1.1fr;align-items:start}}
+/* ================= studio note ================= */
+.studio-note{padding-top:clamp(40px,5vw,64px);padding-bottom:clamp(40px,5vw,64px)}
+.note-card{
+  display:grid;gap:16px;max-width:720px;margin:0 auto;text-align:center;
+  padding:clamp(30px,4vw,48px);
+}
+.note-card .kicker{color:var(--muted)}
+.note-lines{display:grid;gap:10px;font-size:1.06rem;line-height:1.6;color:var(--ink)}
+html[lang="zh-Hant"] .note-lines{line-height:1.78}
+.note-lines .who{font-weight:800}
+.note-contact{display:flex;justify-content:center;gap:8px 22px;flex-wrap:wrap;margin-top:6px}
+.note-contact a{
+  min-height:44px;display:inline-flex;align-items:center;
+  font-weight:750;color:var(--ink);border-bottom:1.5px solid rgba(28,27,25,.25);
+  transition:color .2s var(--ease),border-color .2s var(--ease);
+}
+.note-contact a:hover{color:var(--accent);border-color:var(--accent)}
+/* ================= footer ================= */
+.site-footer{margin-top:24px;border-top:1px solid var(--line);background:rgba(239,236,230,.55)}
 .footer-inner{padding-top:42px;padding-bottom:30px;display:grid;gap:26px}
-.footer-brand{font-size:1.05rem;font-weight:750;letter-spacing:0.05em}
-.footer-tag{margin-top:6px;color:var(--muted);font-size:0.95rem}
+.footer-brand{font-size:1.05rem;font-weight:750;letter-spacing:.05em}
+.footer-tag{margin-top:6px;color:var(--muted);font-size:.95rem}
 .footer-nav{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center}
 .footer-nav a{
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  color:var(--muted);
-  font-size:0.95rem;
-  font-weight:700;
-  transition:color 160ms var(--ease);
+  min-height:44px;display:inline-flex;align-items:center;
+  color:var(--muted);font-size:.95rem;font-weight:700;transition:color .16s var(--ease);
 }
 .footer-nav a:hover{color:var(--ink)}
-.copyright{color:var(--muted);font-size:0.88rem}
-/* ---------- breakpoints ---------- */
-@media (min-width:520px){
-  .header-inner{border-radius:999px}
-}
+.copyright{color:var(--muted);font-size:.88rem}
 @media (min-width:760px){
-  .work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-  .work-featured{grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr);align-items:center;gap:36px}
-  .principles{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:36px}
   .footer-inner{grid-template-columns:1fr auto;align-items:start}
   .copyright{grid-column:1/-1}
 }
-@media (min-width:900px){
-  .section-header{grid-template-columns:220px minmax(0,1fr);align-items:end}
-  .section-intro{grid-column:2}
-  .about-panel{grid-template-columns:0.9fr 1.1fr;align-items:start}
+@media (max-width:600px){
+  .site-nav > a{display:none} /* mobile: brand + Apps dropdown + lang switch only */
+  .nav-apps{position:static}
+  .apps-menu{position:absolute;left:16px;right:16px;top:calc(100% + 8px);min-width:0}
+  .site-header{position:sticky}
 }
-@media (max-width:420px){
-  .site-header{top:8px;padding:8px 8px 0}
-  .header-inner{padding:5px;gap:4px;justify-content:center}
-  .brand{padding-left:10px;padding-right:10px;font-size:15px}
-  .header-right{justify-content:center}
-  .site-nav a{padding-left:9px;padding-right:9px;font-size:13px}
-  .hero,.page-hero,.section,.detail-section,.footer-inner{padding-left:16px;padding-right:16px}
-  .hv-phone{flex-basis:36%}
-  .hv-phone.hv-main{flex-basis:42%;margin:0 -7%}
+@media (max-width:520px){
+  .header-inner{padding:0 14px}
+  .brand{font-size:15px}
+  .site-nav > a,.nav-apps > button{padding:8px 8px;font-size:13px}
+  .hero,.section,.footer-inner{padding-left:16px;padding-right:16px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -403,71 +333,49 @@ html[lang="zh-Hant"] .about-statement{letter-spacing:-0.005em}
     <a class="brand" href="index.html" aria-label="lwbro studio home">lwbro studio</a>
     <div class="header-right">
       <nav class="site-nav" aria-label="Primary navigation">
-        <a href="index.html#apps" data-en="Apps" data-zh-hant="Apps">Apps</a>
-        <a href="index.html#studio" data-en="Studio" data-zh-hant="工作室">Studio</a>
+        <div class="nav-apps">
+          <button type="button" aria-expanded="false" aria-controls="apps-menu" data-nav-apps>
+            <span data-en="Apps" data-zh-hant="Apps">Apps</span>
+            <svg class="chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="apps-menu" id="apps-menu" role="menu">
+            <a href="ziwei.html" role="menuitem">
+              <span class="m-name">Ziwei Bazi Trend</span>
+              <span class="m-status" data-en="Available · Free" data-zh-hant="已上架 · 免費">Available · Free</span>
+            </a>
+            <a href="glyco.html" role="menuitem">
+              <span class="m-name">Glyco Navigator</span>
+              <span class="m-status" data-en="Coming Soon" data-zh-hant="審核中">Coming Soon</span>
+            </a>
+            <a href="western.html" role="menuitem">
+              <span class="m-name" data-en="Name TBD — Western astrology" data-zh-hant="Name TBD — 西洋星盤">Name TBD — Western astrology</span>
+              <span class="m-status" data-en="In Development" data-zh-hant="開發中">In Development</span>
+            </a>
+          </div>
+        </div>
+        <a href="#studio" data-en="Studio" data-zh-hant="工作室">Studio</a>
         <a href="#contact" data-en="Contact" data-zh-hant="聯絡">Contact</a>
       </nav>
       <div class="lang-switch" role="group" aria-label="Language 語言">
         <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <span class="lang-sep" aria-hidden="true">|</span>
         <button type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
       </div>
     </div>
   </div>
 </header>
 <main>
+  <!-- ================= Hero ================= -->
   <section class="hero" aria-labelledby="hero-title">
-    <div>
-      <p class="kicker" data-en="Independent iOS studio" data-zh-hant="獨立 iOS 工作室">Independent iOS studio</p>
-      <h1 id="hero-title"><span class="line" data-en="Personal apps," data-zh-hant="個人 App，">Personal apps,</span><span class="line" data-en="made carefully." data-zh-hant="用心打造。">made carefully.</span></h1>
-      <p class="hero-lede" data-en="Personal record &amp; analysis tools — quiet by design, local-first whenever possible." data-zh-hant="個人紀錄與分析工具 — 安靜設計，資料優先留在你的裝置上。">Personal record &amp; analysis tools — quiet by design, local-first whenever possible.</p>
-    </div>
-    <div class="hero-visual" aria-hidden="false">
-      <div class="hv-phone hv-left">
-        <div class="phone">
-          <span class="island"></span>
-          <div class="screen"><img src="assets/glyco/01-analyze-empty.png" alt="Glyco Navigator — meal analysis screen" data-alt-en="Glyco Navigator — meal analysis screen" data-alt-zh-hant="Glyco Navigator — 餐點分析畫面"></div>
-        </div>
-      </div>
-      <div class="hv-phone hv-main">
-        <div class="phone">
-          <span class="island"></span>
-          <div class="screen"><img src="assets/ziwei/01-home.png" alt="Ziwei Bazi Trend — today's flow home screen" data-alt-en="Ziwei Bazi Trend — today's flow home screen" data-alt-zh-hant="Ziwei Bazi Trend — 今日流運主畫面"></div>
-        </div>
-      </div>
-      <div class="hv-phone hv-right">
-        <div class="phone">
-          <span class="island"></span>
-          <div class="screen">
-            <svg viewBox="0 0 1290 2796" role="img" aria-label="Western astrology app — natal chart design preview" style="display:block;width:100%;height:100%;background:#faf6ef">
-              <circle cx="645" cy="1300" r="430" fill="none" stroke="#b3a08b" stroke-width="3"/>
-              <circle cx="1300" cy="1300" r="0" fill="none"/>
-              <circle cx="645" cy="1300" r="330" fill="none" stroke="#c9bba6" stroke-width="2"/>
-              <g stroke="#c9bba6" stroke-width="2">
-                <line x1="645" y1="870" x2="645" y2="1730"/>
-                <line x1="215" y1="1300" x2="1075" y2="1300"/>
-                <line x1="273" y1="928" x2="1017" y2="1672"/>
-                <line x1="273" y1="1672" x2="1017" y2="928"/>
-                <line x1="430" y1="927" x2="860" y2="1673" opacity="0"/>
-              </g>
-              <g font-family="ui-monospace,Menlo,monospace" font-size="44" fill="#8a7a63" text-anchor="middle">
-                <text x="645" y="940">AS</text><text x="645" y="1700">DS</text>
-                <text x="300" y="1315">MC</text><text x="990" y="1315">IC</text>
-              </g>
-              <g fill="#a5947c">
-                <circle cx="645" cy="1010" r="14"/><circle cx="900" cy="1180" r="14"/>
-                <circle cx="390" cy="1180" r="14"/><circle cx="500" cy="1520" r="14"/>
-                <circle cx="860" cy="1500" r="14"/><circle cx="645" cy="1590" r="14"/>
-              </g>
-              <text x="645" y="2050" font-family="ui-monospace,Menlo,monospace" font-size="40" letter-spacing="6" fill="#a5947c" text-anchor="middle">DESIGN PREVIEW</text>
-            </svg>
-          </div>
-          <span class="preview-badge" data-en="Design preview" data-zh-hant="設計預覽">Design preview</span>
-        </div>
-      </div>
-    </div>
+    <p class="kicker" data-en="Independent iOS studio" data-zh-hant="獨立 iOS 工作室">Independent iOS studio</p>
+    <h1 id="hero-title"><span class="line" data-en="Personal apps," data-zh-hant="個人 App，">Personal apps,</span><span class="line" data-en="made carefully." data-zh-hant="用心打造。">made carefully.</span></h1>
+    <p class="hero-sub" data-en="An independent iOS studio crafting calm, focused tools for everyday life." data-zh-hant="專注打造安靜、順手、陪伴日常的獨立 iOS 工作室。">An independent iOS studio crafting calm, focused tools for everyday life.</p>
+    <p class="hero-meta">
+      <span class="dotset" aria-hidden="true"><i style="background:var(--ziwei-deep)"></i><i style="background:var(--coral-deep)"></i><i style="background:var(--sand-deep)"></i></span>
+      <span data-en="3 apps · iPhone &amp; iPad" data-zh-hant="3 款 App · iPhone 與 iPad">3 apps · iPhone &amp; iPad</span>
+    </p>
   </section>
 
+  <!-- ================= Apps — horizontal showcase cards ================= -->
   <section class="section" id="apps" aria-labelledby="apps-title">
     <div class="section-header">
       <p class="section-label" data-en="Work" data-zh-hant="作品">Work</p>
@@ -475,77 +383,117 @@ html[lang="zh-Hant"] .about-statement{letter-spacing:-0.005em}
       <p class="section-intro" data-en="Each app is built around a personal practice: record what happened, return to it later, and see the shape of your own data." data-zh-hant="每一款 App 都圍繞一種個人習慣：記下發生的事，之後回來看，看見自己資料的形狀。">Each app is built around a personal practice: record what happened, return to it later, and see the shape of your own data.</p>
     </div>
 
-    <article class="work-featured ziwei">
-      <div class="card-copy">
-        <div class="card-top">
-          <span class="status available" data-en="Available" data-zh-hant="已上架">Available</span>
-          <span class="card-meta" data-en="iOS · Free" data-zh-hant="iOS · 免費">iOS · Free</span>
+    <div class="showcase">
+      <!-- Ziwei -->
+      <article class="app-card ziwei">
+        <div class="card-info">
+          <div class="card-top">
+            <span class="app-icon ziwei" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 30 30"><g fill="#35704F"><rect x="2" y="2" width="7" height="7" rx="2"/><rect x="11.5" y="2" width="7" height="7" rx="2" opacity=".55"/><rect x="21" y="2" width="7" height="7" rx="2" opacity=".3"/><rect x="2" y="11.5" width="7" height="7" rx="2" opacity=".55"/><rect x="11.5" y="11.5" width="7" height="7" rx="2"/><rect x="21" y="11.5" width="7" height="7" rx="2" opacity=".55"/><rect x="2" y="21" width="7" height="7" rx="2" opacity=".3"/><rect x="11.5" y="21" width="7" height="7" rx="2" opacity=".55"/><rect x="21" y="21" width="7" height="7" rx="2"/></g></svg>
+            </span>
+            <span class="status available" data-en="Available" data-zh-hant="已上架">Available</span>
+          </div>
+          <div>
+            <h3 class="card-name">Ziwei Bazi Trend</h3>
+            <p class="card-sub" data-en="Ziwei &amp; Bazi journal" data-zh-hant="紫微八字趨勢">Ziwei &amp; Bazi journal</p>
+          </div>
+          <p class="card-value" data-en="Your Ziwei chart, daily flow, and how you actually felt — kept together, so you can see your own rhythm over time." data-zh-hant="把紫微命盤、每日流運與心情精力放在一起，讓你看見自己一段時間的節奏。">Your Ziwei chart, daily flow, and how you actually felt — kept together, so you can see your own rhythm over time.</p>
+          <ul class="pills">
+            <li>iOS</li>
+            <li data-en="Personal journal" data-zh-hant="個人紀錄">Personal journal</li>
+          </ul>
+          <ul class="mini-flow" aria-label="How it works">
+            <li><span class="n">1</span><span data-en="Birth details" data-zh-hant="輸入生辰">Birth details</span></li>
+            <li class="mf-arrow" aria-hidden="true">→</li>
+            <li><span class="n">2</span><span data-en="Chart" data-zh-hant="生成命盤">Chart</span></li>
+            <li class="mf-arrow" aria-hidden="true">→</li>
+            <li><span class="n">3</span><span data-en="Daily flow + trends" data-zh-hant="每日流運＋趨勢">Daily flow + trends</span></li>
+          </ul>
+          <a class="explore-link" href="ziwei.html"><span data-en="Explore App" data-zh-hant="深入了解">Explore App</span><span class="arr" aria-hidden="true">→</span></a>
         </div>
-        <h3>Ziwei Bazi Trend</h3>
-        <p class="zh-name" data-en="Ziwei &amp; Bazi journal" data-zh-hant="紫微八字趨勢">Ziwei &amp; Bazi journal</p>
-        <p class="card-desc" data-en="A personal Ziwei and Bazi journal — charts, daily flow, mood and energy trends in one quiet place." data-zh-hant="個人的紫微紀錄與分析 — 命盤、每日流運、心情與精力趨勢，放在同一個安靜的地方。">A personal Ziwei and Bazi journal — charts, daily flow, mood and energy trends in one quiet place.</p>
-        <ul class="mini-flow" aria-label="How it works">
-          <li><span class="n">1</span><span data-en="Birth details" data-zh-hant="輸入生辰">Birth details</span></li>
-          <li class="mf-arrow" aria-hidden="true">→</li>
-          <li><span class="n">2</span><span data-en="Chart" data-zh-hant="生成命盤">Chart</span></li>
-          <li class="mf-arrow" aria-hidden="true">→</li>
-          <li><span class="n">3</span><span data-en="Daily flow + trends" data-zh-hant="每日流運＋趨勢">Daily flow + trends</span></li>
-        </ul>
-        <div class="card-footer">
-          <a class="card-link" href="ziwei.html"><span data-en="View app" data-zh-hant="查看 App">View app</span> <span aria-hidden="true">→</span></a>
+        <div class="card-stage">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen"><img src="assets/ziwei/01-home.png" alt="Ziwei Bazi Trend — today's flow home screen" data-alt-en="Ziwei Bazi Trend — today's flow home screen" data-alt-zh-hant="Ziwei Bazi Trend — 今日流運主畫面"></div>
+          </div>
+          <div class="detail-chip" aria-hidden="true">
+            <div class="chip-img"><img src="assets/ziwei/03-ziwei-chart.png" style="object-position:50% 6%" alt="" loading="lazy"></div>
+            <span class="chip-cap" data-en="NATAL CHART" data-zh-hant="本命盤">NATAL CHART</span>
+          </div>
         </div>
-      </div>
-      <div class="work-phones">
-        <div class="phone">
-          <span class="island"></span>
-          <div class="screen"><img src="assets/ziwei/01-home.png" alt="Ziwei Bazi Trend — today's flow" data-alt-en="Ziwei Bazi Trend — today's flow" data-alt-zh-hant="Ziwei Bazi Trend — 今日流運"></div>
-        </div>
-        <div class="phone">
-          <span class="island"></span>
-          <div class="screen"><img src="assets/ziwei/03-ziwei-chart.png" alt="Ziwei Bazi Trend — natal chart" data-alt-en="Ziwei Bazi Trend — natal chart" data-alt-zh-hant="Ziwei Bazi Trend — 本命盤"></div>
-        </div>
-      </div>
-    </article>
+      </article>
 
-    <div class="work-grid" style="margin-top:18px">
-      <article class="work-card glyco">
-        <div class="card-top">
-          <span class="status coming" data-en="Coming Soon" data-zh-hant="審核中">Coming Soon</span>
-          <span class="card-meta">iOS</span>
+      <!-- Glyco (flipped) -->
+      <article class="app-card glyco flip">
+        <div class="card-info">
+          <div class="card-top">
+            <span class="app-icon glyco" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="11" fill="none" stroke="#A84A38" stroke-width="2.6"/><circle cx="15" cy="15" r="4.5" fill="#A84A38"/></svg>
+            </span>
+            <span class="status coming" data-en="Coming Soon" data-zh-hant="審核中">Coming Soon</span>
+          </div>
+          <div>
+            <h3 class="card-name">Glyco Navigator</h3>
+            <p class="card-sub" data-en="Glucose &amp; meal journal" data-zh-hant="血糖與飲食紀錄">Glucose &amp; meal journal</p>
+          </div>
+          <p class="card-value" data-en="Snap your meal before you eat — get a breakdown with eating-order guidance, and keep every reading in context." data-zh-hant="吃之前拍一張餐點，取得分析與進食順序建議，讓每一餐與血糖變化留下脈絡。">Snap your meal before you eat — get a breakdown with eating-order guidance, and keep every reading in context.</p>
+          <ul class="pills">
+            <li>iOS</li>
+            <li data-en="Meal journal" data-zh-hant="飲食紀錄">Meal journal</li>
+          </ul>
+          <ul class="mini-flow" aria-label="How it works">
+            <li><span class="n">1</span><span data-en="Photo of meal" data-zh-hant="拍餐點照片">Photo of meal</span></li>
+            <li class="mf-arrow" aria-hidden="true">→</li>
+            <li><span class="n">2</span><span data-en="Analysis + order" data-zh-hant="分析＋進食順序">Analysis + order</span></li>
+            <li class="mf-arrow" aria-hidden="true">→</li>
+            <li><span class="n">3</span><span data-en="Log &amp; trends" data-zh-hant="紀錄血糖・看趨勢">Log &amp; trends</span></li>
+          </ul>
+          <a class="explore-link" href="glyco.html"><span data-en="Explore App" data-zh-hant="深入了解">Explore App</span><span class="arr" aria-hidden="true">→</span></a>
         </div>
-        <div class="work-phone-single">
+        <div class="card-stage">
           <div class="phone">
             <span class="island"></span>
             <div class="screen"><img src="assets/glyco/02-analysis-result.png" alt="Glyco Navigator — analysis result" data-alt-en="Glyco Navigator — analysis result" data-alt-zh-hant="Glyco Navigator — 分析結果"></div>
           </div>
-        </div>
-        <div>
-          <h3>Glyco Navigator</h3>
-          <p class="zh-name" data-en="Glucose &amp; meal journal" data-zh-hant="血糖與飲食紀錄">Glucose &amp; meal journal</p>
-          <p class="card-desc" data-en="A glucose and meal journal with photo analysis, eating-order guidance, GI reference, and trend statistics." data-zh-hant="血糖與飲食紀錄 — 餐點照片分析、進食順序建議、GI 參考與趨勢統計。">A glucose and meal journal with photo analysis, eating-order guidance, GI reference, and trend statistics.</p>
-        </div>
-        <ul class="mini-flow" aria-label="How it works">
-          <li><span class="n">1</span><span data-en="Photo of meal" data-zh-hant="拍餐點照片">Photo of meal</span></li>
-          <li class="mf-arrow" aria-hidden="true">→</li>
-          <li><span class="n">2</span><span data-en="Analysis + order" data-zh-hant="分析＋進食順序">Analysis + order</span></li>
-          <li class="mf-arrow" aria-hidden="true">→</li>
-          <li><span class="n">3</span><span data-en="Log &amp; trends" data-zh-hant="紀錄血糖・看趨勢">Log &amp; trends</span></li>
-        </ul>
-        <div class="card-footer">
-          <a class="card-link" href="glyco.html"><span data-en="View app" data-zh-hant="查看 App">View app</span> <span aria-hidden="true">→</span></a>
+          <div class="detail-chip" aria-hidden="true">
+            <div class="chip-img"><img src="assets/glyco/01-analyze-empty.png" style="object-position:50% 0%" alt="" loading="lazy"></div>
+            <span class="chip-cap" data-en="SNAP TO ANALYZE" data-zh-hant="拍照分析">SNAP TO ANALYZE</span>
+          </div>
         </div>
       </article>
 
-      <article class="work-card western">
-        <div class="card-top">
-          <span class="status development" data-en="In Development" data-zh-hant="開發中">In Development</span>
-          <span class="card-meta">iOS</span>
+      <!-- Western -->
+      <article class="app-card western">
+        <div class="card-info">
+          <div class="card-top">
+            <span class="app-icon western" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="11" fill="none" stroke="#6F6250" stroke-width="2.4"/><circle cx="15" cy="15" r="5.5" fill="none" stroke="#6F6250" stroke-width="1.8"/><path d="M15 2v6M15 22v6M2 15h6M22 15h6" stroke="#6F6250" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <span class="status development" data-en="In Development" data-zh-hant="開發中">In Development</span>
+          </div>
+          <div>
+            <h3 class="card-name">Name TBD</h3>
+            <p class="card-sub" data-en="Western astrology journal" data-zh-hant="西洋星盤 App">Western astrology journal</p>
+          </div>
+          <p class="card-value" data-en="A quiet home for your natal chart, daily transits, and how you actually felt — designed English-first." data-zh-hant="本命星盤、每日行運，和你真實的狀態，放在同一個安靜的地方——以英文介面優先設計。">A quiet home for your natal chart, daily transits, and how you actually felt — designed English-first.</p>
+          <ul class="pills">
+            <li>iOS</li>
+            <li data-en="Astrology journal" data-zh-hant="星盤紀錄">Astrology journal</li>
+          </ul>
+          <ul class="mini-flow" aria-label="How it works">
+            <li><span class="n">1</span><span data-en="Birth details" data-zh-hant="出生資料">Birth details</span></li>
+            <li class="mf-arrow" aria-hidden="true">→</li>
+            <li><span class="n">2</span><span data-en="Natal chart" data-zh-hant="生成星盤">Natal chart</span></li>
+            <li class="mf-arrow" aria-hidden="true">→</li>
+            <li><span class="n">3</span><span data-en="Daily transits" data-zh-hant="每日行運">Daily transits</span></li>
+          </ul>
+          <a class="explore-link" href="western.html"><span data-en="Explore App" data-zh-hant="深入了解">Explore App</span><span class="arr" aria-hidden="true">→</span></a>
         </div>
-        <div class="work-phone-single">
+        <div class="card-stage">
           <div class="phone">
             <span class="island"></span>
             <div class="screen">
-              <svg viewBox="0 0 1290 2796" role="img" aria-label="Western astrology app — natal chart design preview" style="display:block;width:100%;height:100%;background:#faf6ef">
+              <svg viewBox="0 0 1290 2796" role="img" aria-label="Western astrology app — natal chart design preview" style="background:#faf6ef">
                 <circle cx="645" cy="1300" r="430" fill="none" stroke="#b3a08b" stroke-width="3"/>
                 <circle cx="645" cy="1300" r="330" fill="none" stroke="#c9bba6" stroke-width="2"/>
                 <g stroke="#c9bba6" stroke-width="2">
@@ -568,32 +516,32 @@ html[lang="zh-Hant"] .about-statement{letter-spacing:-0.005em}
             </div>
             <span class="preview-badge" data-en="Design preview" data-zh-hant="設計預覽">Design preview</span>
           </div>
-        </div>
-        <div>
-          <h3>Name TBD</h3>
-          <p class="zh-name" data-en="Western astrology journal" data-zh-hant="西洋星盤 App">Western astrology journal</p>
-          <p class="card-desc" data-en="A personal Western astrology journal — natal chart, planetary positions, daily transits, and mood-energy tracking." data-zh-hant="個人的西洋星盤紀錄 — 本命星盤、行星位置、每日行運，以及心情與精力追蹤。">A personal Western astrology journal — natal chart, planetary positions, daily transits, and mood-energy tracking.</p>
-        </div>
-        <ul class="mini-flow" aria-label="How it works">
-          <li><span class="n">1</span><span data-en="Birth details" data-zh-hant="出生資料">Birth details</span></li>
-          <li class="mf-arrow" aria-hidden="true">→</li>
-          <li><span class="n">2</span><span data-en="Natal chart" data-zh-hant="生成星盤">Natal chart</span></li>
-          <li class="mf-arrow" aria-hidden="true">→</li>
-          <li><span class="n">3</span><span data-en="Daily transits" data-zh-hant="每日行運">Daily transits</span></li>
-        </ul>
-        <div class="card-footer">
-          <a class="card-link" href="western.html"><span data-en="View app" data-zh-hant="查看 App">View app</span> <span aria-hidden="true">→</span></a>
+          <div class="detail-chip" aria-hidden="true">
+            <div class="chip-img" style="background:#faf6ef">
+              <svg viewBox="0 0 500 400" style="width:100%;height:100%;display:block">
+                <circle cx="250" cy="200" r="120" fill="none" stroke="#b3a08b" stroke-width="3"/>
+                <circle cx="250" cy="200" r="88" fill="none" stroke="#c9bba6" stroke-width="2"/>
+                <g stroke="#c9bba6" stroke-width="2">
+                  <line x1="250" y1="80" x2="250" y2="320"/><line x1="130" y1="200" x2="370" y2="200"/>
+                  <line x1="165" y1="115" x2="335" y2="285"/><line x1="165" y1="285" x2="335" y2="115"/>
+                </g>
+                <g fill="#a5947c"><circle cx="250" cy="112" r="7"/><circle cx="322" cy="160" r="7"/><circle cx="190" cy="250" r="7"/><circle cx="300" cy="268" r="7"/></g>
+              </svg>
+            </div>
+            <span class="chip-cap" data-en="CHART WHEEL" data-zh-hant="星盤輪圖">CHART WHEEL</span>
+          </div>
         </div>
       </article>
     </div>
   </section>
 
+  <!-- ================= Studio ================= -->
   <section class="section" id="studio" aria-labelledby="studio-title">
     <div class="section-header">
       <p class="section-label" data-en="Studio" data-zh-hant="工作室">Studio</p>
       <h2 class="section-title" id="studio-title" data-en="Records before noise." data-zh-hant="先紀錄，不喧嘩。">Records before noise.</h2>
     </div>
-    <div class="about-panel">
+    <div class="about-panel prose">
       <p class="about-statement" data-en="Quiet software for personal patterns." data-zh-hant="為個人節奏而做的安靜軟體。">Quiet software for personal patterns.</p>
       <div>
         <div class="about-copy">
@@ -617,6 +565,22 @@ html[lang="zh-Hant"] .about-statement{letter-spacing:-0.005em}
             <p data-en="No accounts unless a feature truly needs one; your data is yours." data-zh-hant="除非功能真的需要，否則不要求帳號；你的資料屬於你。">No accounts unless a feature truly needs one; your data is yours.</p>
           </li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Studio note ================= -->
+  <section class="studio-note" id="studio-note" aria-labelledby="note-title">
+    <div class="note-card" style="width:min(var(--max),100%);margin:0 auto;padding-left:20px;padding-right:20px">
+      <p class="kicker" id="note-title" data-en="A note from the studio" data-zh-hant="工作室小記">A note from the studio</p>
+      <div class="note-lines">
+        <p class="who" data-en="lwbro studio is one person." data-zh-hant="lwbro studio 只有一個人。">lwbro studio is one person.</p>
+        <p data-en="I design and build every screen myself, because the tools I use every day should feel calm, honest, and made by hand." data-zh-hant="每一個畫面都由我親自設計與開發，因為每天使用的工具，應該是安靜、誠實、親手做出來的。">I design and build every screen myself, because the tools I use every day should feel calm, honest, and made by hand.</p>
+        <p data-en="If something doesn’t work for you, or you have an idea — write to me directly. I read every message." data-zh-hant="如果使用上遇到任何問題，或你有任何想法，歡迎直接寫信給我，每一封我都會看。">If something doesn’t work for you, or you have an idea — write to me directly. I read every message.</p>
+      </div>
+      <div class="note-contact">
+        <a href="mailto:lwbro@me.com">lwbro@me.com</a>
+        <a href="https://lwbroo.github.io/privacy/" target="_blank" rel="noopener noreferrer" data-en="Privacy Policy" data-zh-hant="隱私政策">Privacy Policy</a>
       </div>
     </div>
   </section>
@@ -667,6 +631,24 @@ html[lang="zh-Hant"] .about-statement{letter-spacing:-0.005em}
   var saved=null;
   try{saved=localStorage.getItem(KEY);}catch(e){}
   apply((saved==='zh-Hant'||saved==='en')?saved:DEFAULT);
+
+  /* Apps dropdown — click, tap, and keyboard friendly; stays on current page */
+  var navBtn=document.querySelector('[data-nav-apps]');
+  var menu=document.getElementById('apps-menu');
+  if(navBtn&&menu){
+    function closeMenu(){menu.classList.remove('open');navBtn.setAttribute('aria-expanded','false');}
+    navBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=menu.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded',String(open));
+    });
+    document.addEventListener('click',function(e){
+      if(!menu.contains(e.target)&&e.target!==navBtn){closeMenu();}
+    });
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){closeMenu();navBtn.focus();}
+    });
+  }
 })();
 </script>
 </body>
